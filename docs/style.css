@@ -1,0 +1,63 @@
+/*
+ * style.css — Custom styles for PDD Agent dashboard
+ * Supplements Tailwind CSS with styles that are cleaner as plain CSS
+ */
+
+/* ── Typography ── */
+.prose-pdd h1 { font-family: 'Playfair Display', Georgia, serif; }
+.prose-pdd a  { color: #f59e0b; text-decoration: underline; text-underline-offset: 2px; }
+.prose-pdd a:hover { color: #d97706; }
+
+/* ── Section color borders (direct CSS for Tailwind CDN JIT limitation) ── */
+.border-l-purple { border-left-color: #7c3aed !important; }
+.border-l-teal   { border-left-color: #0f766e !important; }
+.border-l-orange { border-left-color: #c2410c !important; }
+.border-l-green  { border-left-color: #15803d !important; }
+.border-l-pink   { border-left-color: #be185d !important; }
+
+/* ── Story card hover glow ── */
+.story-card:hover {
+  box-shadow: 0 4px 20px rgba(245, 158, 11, 0.08);
+}
+.dark .story-card:hover {
+  box-shadow: 0 4px 20px rgba(245, 158, 11, 0.12);
+}
+
+/* ── Top stories numbered badges ── */
+.rank-badge {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  background: #f59e0b;
+  color: white;
+  font-size: 0.875rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+/* ── Loading state ── */
+@keyframes shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+.shimmer {
+  background: linear-gradient(90deg, #f1f5f9 25%, #e2e8f0 50%, #f1f5f9 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+/* ── Print styles ── */
+@media print {
+  header, footer, #darkModeToggle { display: none; }
+  .section-card { opacity: 1 !important; animation: none !important; }
+  body { background: white; color: black; }
+}
+
+/* ── Mobile touch improvements ── */
+@media (max-width: 640px) {
+  .story-card { border-radius: 1rem; }
+  h1 { font-size: 2.25rem; }
+}

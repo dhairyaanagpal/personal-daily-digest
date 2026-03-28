@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Friday Briefing — March 27, 2026 — PDD</title>
+
+  <!-- Tailwind CSS via CDN — no build step needed -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Inter"', 'system-ui', 'sans-serif'],
+            serif: ['"Playfair Display"', 'Georgia', 'serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          },
+          colors: {
+            amber: { 400: '#fbbf24', 500: '#f59e0b', 600: '#d97706' },
+          },
+          animation: {
+            'fade-up': 'fadeUp 0.5s ease forwards',
+          },
+          keyframes: {
+            fadeUp: {
+              '0%': { opacity: '0', transform: 'translateY(16px)' },
+              '100%': { opacity: '1', transform: 'translateY(0)' },
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+  <!-- Custom styles -->
+  <link rel="stylesheet" href="style.css" />
+
+  <style>
+    /* Staggered fade-in for sections */
+    .section-card { opacity: 0; animation: fadeUp 0.5s ease forwards; }
+    .section-card:nth-child(1) { animation-delay: 0.1s; }
+    .section-card:nth-child(2) { animation-delay: 0.2s; }
+    .section-card:nth-child(3) { animation-delay: 0.3s; }
+    .section-card:nth-child(4) { animation-delay: 0.4s; }
+    .section-card:nth-child(5) { animation-delay: 0.5s; }
+
+    /* Section color pills */
+    .pill-purple  { background: #ede9fe; color: #7c3aed; }
+    .pill-teal    { background: #ccfbf1; color: #0f766e; }
+    .pill-orange  { background: #ffedd5; color: #c2410c; }
+    .pill-green   { background: #dcfce7; color: #15803d; }
+    .pill-pink    { background: #fce7f3; color: #be185d; }
+
+    /* Dark mode pills */
+    .dark .pill-purple  { background: #3b0764; color: #c4b5fd; }
+    .dark .pill-teal    { background: #042f2e; color: #5eead4; }
+    .dark .pill-orange  { background: #431407; color: #fed7aa; }
+    .dark .pill-green   { background: #052e16; color: #86efac; }
+    .dark .pill-pink    { background: #500724; color: #f9a8d4; }
+
+    /* Section header border colors */
+    .border-purple { border-color: #7c3aed; }
+    .border-teal   { border-color: #0f766e; }
+    .border-orange { border-color: #c2410c; }
+    .border-green  { border-color: #15803d; }
+    .border-pink   { border-color: #be185d; }
+
+    /* Smooth scrollbar */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #94a3b8; border-radius: 3px; }
+
+    /* Story card hover */
+    .story-card { transition: transform 0.15s ease, box-shadow 0.15s ease; }
+    .story-card:hover { transform: translateY(-2px); }
+  </style>
+</head>
+
+<body class="bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-200 transition-colors duration-300 min-h-screen font-sans">
+
+  <!-- TOP BAR -->
+  <div class="sticky top-0 z-50 bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm border-b border-slate-200 dark:border-slate-700">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <span class="text-amber-500 text-lg">📰</span>
+        <span class="font-semibold text-sm text-slate-600 dark:text-slate-400 tracking-wide uppercase">Personal Daily Digest</span>
+      </div>
+      <button
+        id="darkModeToggle"
+        onclick="toggleDark()"
+        class="p-2 rounded-full text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+        title="Toggle dark mode"
+        aria-label="Toggle dark mode"
+      >
+        <span id="darkIcon" class="hidden dark:inline">☀️</span>
+        <span id="lightIcon" class="dark:hidden">🌙</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <main class="max-w-4xl mx-auto px-4 sm:px-6 py-8">
+    
+
+
+
+
+
+<header class="mb-10">
+  <div class="flex items-center gap-2 mb-3">
+    <span class="text-xs font-semibold tracking-widest uppercase text-amber-500">Weekday Edition</span>
+  </div>
+  <h1 class="font-serif text-4xl sm:text-5xl font-extrabold text-slate-900 dark:text-white leading-tight mb-2">
+    Morning Briefing
+  </h1>
+  <p class="text-lg text-slate-500 dark:text-slate-400">
+    Friday, March 27, 2026
+  </p>
+</header>
+
+
+
+<section class="mb-12">
+  <div class="flex items-center gap-3 mb-5">
+    <div class="h-1 w-8 bg-amber-500 rounded-full"></div>
+    <h2 class="text-xs font-semibold tracking-widest uppercase text-amber-600 dark:text-amber-400">Today's Top Stories</h2>
+  </div>
+
+  <div class="grid gap-4">
+    
+    <div class="group relative bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-2xl p-6 story-card shadow-sm hover:shadow-md hover:border-amber-300 dark:hover:border-amber-600">
+      
+      <div class="absolute -top-3 -left-3 w-8 h-8 rounded-full bg-amber-500 text-white text-sm font-bold flex items-center justify-center shadow-sm">
+        1
+      </div>
+
+      
+      
+      <div class="mb-3">
+        <span class="pill-purple text-xs font-semibold px-2.5 py-1 rounded-full">
+          AI Policy &amp; Responsible Tech
+        </span>
+      </div>
+
+      <h3 class="font-semibold text-lg text-slate-900 dark:text-white mb-2 leading-snug">
+        Sample: This is a Dry-Run Digest
+      </h3>
+      <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed mb-3">
+        This digest was generated in dry-run mode (DRY_RUN=true). No Gemini API calls were made. Real content will appear on live runs.
+      </p>
+      
+      <a href="https://example.com" target="_blank" rel="noopener noreferrer"
+         class="inline-flex items-center gap-1 text-xs font-medium text-amber-600 dark:text-amber-400 hover:text-amber-700 dark:hover:text-amber-300 transition-colors">
+        Read full story →
+      </a>
+      
+    </div>
+    
+    <div class="group relative bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-2xl p-6 story-card shadow-sm hover:shadow-md hover:border-amber-300 dark:hover:border-amber-600">
+      
+      <div class="absolute -top-3 -left-3 w-8 h-8 rounded-full bg-amber-500 text-white text-sm font-bold flex items-center justify-center shadow-sm">
+        2
+      </div>
+
+      
+      
+      <div class="mb-3">
+        <span class="pill-orange text-xs font-semibold px-2.5 py-1 rounded-full">
+          AI Tools &amp; Launches
+        </span>
+      </div>
+
+      <h3 class="font-semibold text-lg text-slate-900 dark:text-white mb-2 leading-snug">
+        Sample: Test Your HTML Template
+      </h3>
+      <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed mb-3">
+        Open docs/index.html in your browser to verify the layout looks correct. Toggle dark mode with the button in the top-right.
+      </p>
+      
+      <a href="https://example.com" target="_blank" rel="noopener noreferrer"
+         class="inline-flex items-center gap-1 text-xs font-medium text-amber-600 dark:text-amber-400 hover:text-amber-700 dark:hover:text-amber-300 transition-colors">
+        Read full story →
+      </a>
+      
+    </div>
+    
+    <div class="group relative bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-2xl p-6 story-card shadow-sm hover:shadow-md hover:border-amber-300 dark:hover:border-amber-600">
+      
+      <div class="absolute -top-3 -left-3 w-8 h-8 rounded-full bg-amber-500 text-white text-sm font-bold flex items-center justify-center shadow-sm">
+        3
+      </div>
+
+      
+      
+      <div class="mb-3">
+        <span class="pill-teal text-xs font-semibold px-2.5 py-1 rounded-full">
+          Product Management in the AI Era
+        </span>
+      </div>
+
+      <h3 class="font-semibold text-lg text-slate-900 dark:text-white mb-2 leading-snug">
+        Sample: Configure Your API Keys
+      </h3>
+      <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed mb-3">
+        Add GEMINI_API_KEY to your GitHub Secrets to enable real synthesis. Optionally add REDDIT_CLIENT_ID for Reddit data.
+      </p>
+      
+      <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener noreferrer"
+         class="inline-flex items-center gap-1 text-xs font-medium text-amber-600 dark:text-amber-400 hover:text-amber-700 dark:hover:text-amber-300 transition-colors">
+        Read full story →
+      </a>
+      
+    </div>
+    
+  </div>
+</section>
+
+
+
+<div class="flex items-center gap-4 mb-8">
+  <div class="flex-1 h-px bg-slate-200 dark:bg-slate-700"></div>
+  <span class="text-xs font-semibold tracking-widest uppercase text-slate-400 dark:text-slate-500">Full Briefing</span>
+  <div class="flex-1 h-px bg-slate-200 dark:bg-slate-700"></div>
+</div>
+
+
+
+
+  
+  
+  
+  
+
+  <div class="section-card mb-8 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-2xl overflow-hidden shadow-sm">
+
+    
+    <div class="border-l-4 border-purple pl-5 pr-6 py-5 flex items-center gap-3 border-b border-slate-100 dark:border-slate-800">
+      <span class="text-2xl" role="img" aria-label="AI Policy &amp; Responsible Tech">🔬</span>
+      <div>
+        <h2 class="font-bold text-lg text-slate-900 dark:text-white">AI Policy &amp; Responsible Tech</h2>
+      </div>
+    </div>
+
+    <div class="p-6">
+      
+      
+      
+        
+        <div class="space-y-5">
+          
+          <div class="story-card pb-5 ">
+            <h3 class="font-semibold text-slate-900 dark:text-white mb-2 leading-snug hover:text-amber-600 dark:hover:text-amber-400 transition-colors">
+              
+              <a href="https://example.com/ai-policy" target="_blank" rel="noopener noreferrer">
+                Sample Story — AI Policy
+              </a>
+              
+            </h3>
+            <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed mb-2">
+              This is a sample story. In a real digest, this would contain synthesized coverage of AI regulation, ethics developments, and responsible AI news from the past 24 hours.
+            </p>
+            <div class="flex items-center gap-3">
+              <span class="text-xs text-slate-400 dark:text-slate-500">Sample Source</span>
+              
+              <a href="https://example.com/ai-policy" target="_blank" rel="noopener noreferrer"
+                 class="text-xs text-purple-600 dark:text-purple-400 hover:underline font-medium">
+                Source →
+              </a>
+              
+            </div>
+          </div>
+          
+        </div>
+
+        
+        
+        <div class="mt-5 p-4 bg-slate-50 dark:bg-slate-800/50 rounded-xl border border-slate-200 dark:border-slate-700">
+          <p class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-2">Pattern &amp; Context</p>
+          <p class="text-sm text-slate-700 dark:text-slate-300 leading-relaxed italic">This is a sample synthesis paragraph. In a real digest, Gemini would connect the dots across all AI policy stories and identify the bigger pattern.</p>
+        </div>
+        
+      
+    </div>
+  </div>
+  
+
+  
+  
+  
+  
+
+  <div class="section-card mb-8 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-2xl overflow-hidden shadow-sm">
+
+    
+    <div class="border-l-4 border-teal pl-5 pr-6 py-5 flex items-center gap-3 border-b border-slate-100 dark:border-slate-800">
+      <span class="text-2xl" role="img" aria-label="Product Management in the AI Era">📋</span>
+      <div>
+        <h2 class="font-bold text-lg text-slate-900 dark:text-white">Product Management in the AI Era</h2>
+      </div>
+    </div>
+
+    <div class="p-6">
+      
+      
+      
+        <p class="text-slate-400 dark:text-slate-500 text-sm italic">No major developments today.</p>
+      
+    </div>
+  </div>
+  
+
+  
+  
+  
+  
+
+  <div class="section-card mb-8 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-2xl overflow-hidden shadow-sm">
+
+    
+    <div class="border-l-4 border-orange pl-5 pr-6 py-5 flex items-center gap-3 border-b border-slate-100 dark:border-slate-800">
+      <span class="text-2xl" role="img" aria-label="AI Tools &amp; Launches">⚡</span>
+      <div>
+        <h2 class="font-bold text-lg text-slate-900 dark:text-white">AI Tools &amp; Launches</h2>
+      </div>
+    </div>
+
+    <div class="p-6">
+      
+      
+      
+        
+        <div class="space-y-5">
+          
+          <div class="story-card pb-5 ">
+            <h3 class="font-semibold text-slate-900 dark:text-white mb-2 leading-snug hover:text-amber-600 dark:hover:text-amber-400 transition-colors">
+              
+              <a href="https://example.com/ai-tools" target="_blank" rel="noopener noreferrer">
+                Sample Story — AI Tool Launch
+              </a>
+              
+            </h3>
+            <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed mb-2">
+              In a real digest, this section covers major launches and updates from Claude, ChatGPT, Cursor, Figma, and notable new tools. Minor patches are filtered out.
+            </p>
+            <div class="flex items-center gap-3">
+              <span class="text-xs text-slate-400 dark:text-slate-500">Sample Source</span>
+              
+              <a href="https://example.com/ai-tools" target="_blank" rel="noopener noreferrer"
+                 class="text-xs text-orange-600 dark:text-orange-400 hover:underline font-medium">
+                Source →
+              </a>
+              
+            </div>
+          </div>
+          
+        </div>
+
+        
+        
+        <div class="mt-5 p-4 bg-slate-50 dark:bg-slate-800/50 rounded-xl border border-slate-200 dark:border-slate-700">
+          <p class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-2">Pattern &amp; Context</p>
+          <p class="text-sm text-slate-700 dark:text-slate-300 leading-relaxed italic">Sample synthesis for AI tools section.</p>
+        </div>
+        
+      
+    </div>
+  </div>
+  
+
+  
+  
+  
+  
+
+  <div class="section-card mb-8 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-2xl overflow-hidden shadow-sm">
+
+    
+    <div class="border-l-4 border-green pl-5 pr-6 py-5 flex items-center gap-3 border-b border-slate-100 dark:border-slate-800">
+      <span class="text-2xl" role="img" aria-label="India — Broad Landscape">🇮🇳</span>
+      <div>
+        <h2 class="font-bold text-lg text-slate-900 dark:text-white">India — Broad Landscape</h2>
+      </div>
+    </div>
+
+    <div class="p-6">
+      
+      
+      
+        <p class="text-slate-400 dark:text-slate-500 text-sm italic">No major developments today.</p>
+      
+    </div>
+  </div>
+  
+
+  
+  
+  
+  
+
+  <div class="section-card mb-8 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-2xl overflow-hidden shadow-sm">
+
+    
+    <div class="border-l-4 border-pink pl-5 pr-6 py-5 flex items-center gap-3 border-b border-slate-100 dark:border-slate-800">
+      <span class="text-2xl" role="img" aria-label="Content Creator Trends">📱</span>
+      <div>
+        <h2 class="font-bold text-lg text-slate-900 dark:text-white">Content Creator Trends</h2>
+      </div>
+    </div>
+
+    <div class="p-6">
+      
+      
+      
+        
+        <div class="space-y-5">
+          
+          <div class="story-card pb-5 ">
+            <h3 class="font-semibold text-slate-900 dark:text-white mb-2 leading-snug hover:text-amber-600 dark:hover:text-amber-400 transition-colors">
+              
+              <a href="https://example.com/creator-trends" target="_blank" rel="noopener noreferrer">
+                Sample: Carousel Format Outperforming Reels This Week
+              </a>
+              
+            </h3>
+            <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed mb-2">
+              In a real digest, this section would contain specific, actionable creator trends. For example: carousel posts with the &#39;before/after&#39; format are seeing 3x the saves compared to standard Reels this week.
+            </p>
+            <div class="flex items-center gap-3">
+              <span class="text-xs text-slate-400 dark:text-slate-500">Sample Source</span>
+              
+              <a href="https://example.com/creator-trends" target="_blank" rel="noopener noreferrer"
+                 class="text-xs text-pink-600 dark:text-pink-400 hover:underline font-medium">
+                Source →
+              </a>
+              
+            </div>
+          </div>
+          
+        </div>
+
+        
+        
+        <div class="mt-5 p-4 bg-slate-50 dark:bg-slate-800/50 rounded-xl border border-slate-200 dark:border-slate-700">
+          <p class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-2">Pattern &amp; Context</p>
+          <p class="text-sm text-slate-700 dark:text-slate-300 leading-relaxed italic">Sample synthesis for creator trends section.</p>
+        </div>
+        
+      
+    </div>
+  </div>
+  
+
+
+
+<div class="mt-10">
+  <button onclick="toggleSources()" class="flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 transition-colors">
+    <span>📎</span>
+    <span class="font-medium">Show all source links</span>
+    <span class="text-xs">(15 articles collected)</span>
+  </button>
+
+  <div id="sources-list" class="hidden mt-4 p-5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-xs space-y-1 max-h-64 overflow-y-auto">
+    
+    <div class="flex items-start gap-2">
+      
+      <span class="pill-purple px-1.5 py-0.5 rounded text-xs flex-shrink-0">ai_policy</span>
+      <a href="https://example.com/eu-ai-act-implementation" target="_blank" rel="noopener noreferrer"
+         class="text-slate-600 dark:text-slate-400 hover:text-amber-600 dark:hover:text-amber-400 transition-colors truncate">
+        EU Finalizes AI Act Implementation Guidelines for High-Risk Systems
+      </a>
+    </div>
+    
+    <div class="flex items-start gap-2">
+      
+      <span class="pill-green px-1.5 py-0.5 rounded text-xs flex-shrink-0">india</span>
+      <a href="https://example.com/india-national-ai-mission" target="_blank" rel="noopener noreferrer"
+         class="text-slate-600 dark:text-slate-400 hover:text-amber-600 dark:hover:text-amber-400 transition-colors truncate">
+        India Announces National AI Mission with Rs 10,000 Crore Budget
+      </a>
+    </div>
+    
+    <div class="flex items-start gap-2">
+      
+      <span class="pill-orange px-1.5 py-0.5 rounded text-xs flex-shrink-0">ai_tools</span>
+      <a href="https://example.com/claude-code-launch" target="_blank" rel="noopener noreferrer"
+         class="text-slate-600 dark:text-slate-400 hover:text-amber-600 dark:hover:text-amber-400 transition-colors truncate">
+        Anthropic Releases Claude Code with Autonomous Agent Capabilities
+      </a>
+    </div>
+    
+    <div class="flex items-start gap-2">
+      
+      <span class="pill-teal px-1.5 py-0.5 rounded text-xs flex-shrink-0">product_management</span>
+      <a href="https://example.com/ai-first-pm-survey" target="_blank" rel="noopener noreferrer"
+         class="text-slate-600 dark:text-slate-400 hover:text-amber-600 dark:hover:text-amber-400 transition-colors truncate">
+        Product Managers Shifting to &#39;AI-First&#39; Roadmapping — Survey of 500 PMs
+      </a>
+    </div>
+    
+    <div class="flex items-start gap-2">
+      
+      <span class="pill-pink px-1.5 py-0.5 rounded text-xs flex-shrink-0">content_creators</span>
+      <a href="https://example.com/linkedin-carousel-study" target="_blank" rel="noopener noreferrer"
+         class="text-slate-600 dark:text-slate-400 hover:text-amber-600 dark:hover:text-amber-400 transition-colors truncate">
+        LinkedIn Carousel Posts See 4x Engagement vs Video for B2B Content
+      </a>
+    </div>
+    
+    <div class="flex items-start gap-2">
+      
+      <span class="pill-orange px-1.5 py-0.5 rounded text-xs flex-shrink-0">ai_tools</span>
+      <a href="https://example.com/gpt5-launch" target="_blank" rel="noopener noreferrer"
+         class="text-slate-600 dark:text-slate-400 hover:text-amber-600 dark:hover:text-amber-400 transition-colors truncate">
+        OpenAI Launches GPT-5 with Multimodal Reasoning and Extended Context
+      </a>
+    </div>
+    
+    <div class="flex items-start gap-2">
+      
+      <span class="pill-purple px-1.5 py-0.5 rounded text-xs flex-shrink-0">ai_policy</span>
+      <a href="https://example.com/deepfake-detection-standards" target="_blank" rel="noopener noreferrer"
+         class="text-slate-600 dark:text-slate-400 hover:text-amber-600 dark:hover:text-amber-400 transition-colors truncate">
+        Responsible AI Coalition Publishes Deepfake Detection Standards
+      </a>
+    </div>
+    
+    <div class="flex items-start gap-2">
+      
+      <span class="pill-green px-1.5 py-0.5 rounded text-xs flex-shrink-0">india</span>
+      <a href="https://example.com/zomato-q3-results" target="_blank" rel="noopener noreferrer"
+         class="text-slate-600 dark:text-slate-400 hover:text-amber-600 dark:hover:text-amber-400 transition-colors truncate">
+        Zomato Reports Record Q3 with 40% Revenue Growth, Eyes Southeast Asia
+      </a>
+    </div>
+    
+    <div class="flex items-start gap-2">
+      
+      <span class="pill-teal px-1.5 py-0.5 rounded text-xs flex-shrink-0">product_management</span>
+      <a href="https://news.ycombinator.com/item?id=12345678" target="_blank" rel="noopener noreferrer"
+         class="text-slate-600 dark:text-slate-400 hover:text-amber-600 dark:hover:text-amber-400 transition-colors truncate">
+        Show HN: I built an AI PM that writes PRDs from voice memos
+      </a>
+    </div>
+    
+    <div class="flex items-start gap-2">
+      
+      <span class="pill-pink px-1.5 py-0.5 rounded text-xs flex-shrink-0">content_creators</span>
+      <a href="https://example.com/instagram-algorithm-2025" target="_blank" rel="noopener noreferrer"
+         class="text-slate-600 dark:text-slate-400 hover:text-amber-600 dark:hover:text-amber-400 transition-colors truncate">
+        Instagram Algorithm Update Favors &#39;Story-First&#39; Reels — Creator Report
+      </a>
+    </div>
+    
+    <div class="flex items-start gap-2">
+      
+      <span class="pill-orange px-1.5 py-0.5 rounded text-xs flex-shrink-0">ai_tools</span>
+      <a href="https://example.com/cursor-funding" target="_blank" rel="noopener noreferrer"
+         class="text-slate-600 dark:text-slate-400 hover:text-amber-600 dark:hover:text-amber-400 transition-colors truncate">
+        Cursor AI Editor Raises $100M Series B, Crosses 1M Daily Active Users
+      </a>
+    </div>
+    
+    <div class="flex items-start gap-2">
+      
+      <span class="pill-teal px-1.5 py-0.5 rounded text-xs flex-shrink-0">product_management</span>
+      <a href="https://reddit.com/r/ProductManagement/comments/sample123" target="_blank" rel="noopener noreferrer"
+         class="text-slate-600 dark:text-slate-400 hover:text-amber-600 dark:hover:text-amber-400 transition-colors truncate">
+        r/ProductManagement: How are you using AI for user research? Megathread
+      </a>
+    </div>
+    
+    <div class="flex items-start gap-2">
+      
+      <span class="pill-green px-1.5 py-0.5 rounded text-xs flex-shrink-0">india</span>
+      <a href="https://example.com/india-dpdp-rules" target="_blank" rel="noopener noreferrer"
+         class="text-slate-600 dark:text-slate-400 hover:text-amber-600 dark:hover:text-amber-400 transition-colors truncate">
+        India Passes Digital Personal Data Protection Rules — Key Provisions Explained
+      </a>
+    </div>
+    
+    <div class="flex items-start gap-2">
+      
+      <span class="pill-purple px-1.5 py-0.5 rounded text-xs flex-shrink-0">ai_policy</span>
+      <a href="https://example.com/un-ai-safety-resolution" target="_blank" rel="noopener noreferrer"
+         class="text-slate-600 dark:text-slate-400 hover:text-amber-600 dark:hover:text-amber-400 transition-colors truncate">
+        UN Adopts First Global AI Safety Resolution — What It Means
+      </a>
+    </div>
+    
+    <div class="flex items-start gap-2">
+      
+      <span class="pill-pink px-1.5 py-0.5 rounded text-xs flex-shrink-0">content_creators</span>
+      <a href="https://example.com/twitter-algorithm-march" target="_blank" rel="noopener noreferrer"
+         class="text-slate-600 dark:text-slate-400 hover:text-amber-600 dark:hover:text-amber-400 transition-colors truncate">
+        Twitter X Algorithm Boosting &#39;Thread + Carousel&#39; Hybrid Posts in March
+      </a>
+    </div>
+    
+  </div>
+</div>
+
+
+  </main>
+
+  <!-- ARCHIVE NAVIGATION -->
+  
+
+  <!-- FOOTER -->
+  <footer class="border-t border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 py-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500 dark:text-slate-500">
+      <span>Generated at 09:10 PM IST by PDD Agent</span>
+      <a href="https://github.com" class="hover:text-amber-500 transition-colors">View on GitHub →</a>
+    </div>
+  </footer>
+
+  <script>
+    // ─── Dark mode persistence ───────────────────
+    function toggleDark() {
+      const html = document.documentElement;
+      html.classList.toggle('dark');
+      localStorage.setItem('pdd-theme', html.classList.contains('dark') ? 'dark' : 'light');
+    }
+
+    // Apply saved preference on load
+    (function() {
+      const saved = localStorage.getItem('pdd-theme');
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      if (saved === 'dark' || (!saved && prefersDark)) {
+        document.documentElement.classList.add('dark');
+      }
+    })();
+
+    // ─── Collapsible sources ─────────────────────
+    function toggleSources() {
+      const el = document.getElementById('sources-list');
+      if (el) el.classList.toggle('hidden');
+    }
+  </script>
+</body>
+</html>

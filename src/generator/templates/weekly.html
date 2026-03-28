@@ -1,0 +1,144 @@
+{% extends "base.html" %}
+
+{% block title %}Weekly Roundup — {{ digest.date }}{% endblock %}
+
+{% block content %}
+
+{# ── HEADER ── #}
+<header class="mb-10">
+  <div class="flex items-center gap-2 mb-3">
+    <span class="text-xs font-semibold tracking-widest uppercase text-amber-500">Saturday Edition — Weekly Roundup</span>
+  </div>
+  <h1 class="font-serif text-4xl sm:text-5xl font-extrabold text-slate-900 dark:text-white leading-tight mb-2">
+    The Week in Review
+  </h1>
+  <p class="text-lg text-slate-500 dark:text-slate-400">{{ digest.date }}</p>
+</header>
+
+{# ── WEEK SUMMARY ── #}
+{% if digest.week_summary %}
+<section class="mb-10">
+  <div class="p-6 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-700/50 rounded-2xl">
+    <p class="text-xs font-semibold tracking-widest uppercase text-amber-600 dark:text-amber-400 mb-3">This Week at a Glance</p>
+    <p class="text-slate-700 dark:text-slate-300 text-base leading-relaxed">{{ digest.week_summary }}</p>
+  </div>
+</section>
+{% endif %}
+
+{# ── TOP STORIES OF THE WEEK ── #}
+{% if digest.top_stories_of_the_week %}
+<section class="mb-12">
+  <div class="flex items-center gap-3 mb-5">
+    <div class="h-1 w-8 bg-amber-500 rounded-full"></div>
+    <h2 class="text-xs font-semibold tracking-widest uppercase text-amber-600 dark:text-amber-400">Stories That Defined the Week</h2>
+  </div>
+
+  <div class="space-y-4">
+    {% for story in digest.top_stories_of_the_week %}
+    <div class="group relative bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-2xl p-6 story-card shadow-sm hover:shadow-md hover:border-amber-300 dark:hover:border-amber-600">
+      <div class="absolute -top-3 -left-3 w-8 h-8 rounded-full bg-amber-500 text-white text-sm font-bold flex items-center justify-center shadow-sm">
+        {{ story.rank }}
+      </div>
+
+      {% set color = section_colors.get(story.section, 'purple') %}
+      <div class="mb-3">
+        <span class="pill-{{ color }} text-xs font-semibold px-2.5 py-1 rounded-full">
+          {{ section_titles.get(story.section, story.section) }}
+        </span>
+      </div>
+
+      <h3 class="font-semibold text-lg text-slate-900 dark:text-white mb-2 leading-snug">
+        {{ story.headline }}
+      </h3>
+      <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed mb-3">
+        {{ story.summary }}
+      </p>
+      {% if story.source_url %}
+      <a href="{{ story.source_url }}" target="_blank" rel="noopener noreferrer"
+         class="inline-flex items-center gap-1 text-xs font-medium text-amber-600 dark:text-amber-400 hover:text-amber-700 dark:hover:text-amber-300 transition-colors">
+        Read full story →
+      </a>
+      {% endif %}
+    </div>
+    {% endfor %}
+  </div>
+</section>
+{% endif %}
+
+{# ── SECTION DIVIDER ── #}
+<div class="flex items-center gap-4 mb-8">
+  <div class="flex-1 h-px bg-slate-200 dark:bg-slate-700"></div>
+  <span class="text-xs font-semibold tracking-widest uppercase text-slate-400 dark:text-slate-500">Section Roundups</span>
+  <div class="flex-1 h-px bg-slate-200 dark:bg-slate-700"></div>
+</div>
+
+{# ── 5 TOPIC SECTIONS ── #}
+{% set section_order = ['ai_policy', 'product_management', 'ai_tools', 'india', 'content_creators'] %}
+{% for section_key in section_order %}
+  {% set section = digest.sections.get(section_key, {}) %}
+  {% if section %}
+  {% set color = section_colors.get(section_key, 'purple') %}
+  {% set icon = section_icons.get(section_key, '📌') %}
+
+  <div class="section-card mb-8 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-2xl overflow-hidden shadow-sm">
+
+    {# Section Header #}
+    <div class="border-l-4 border-{{ color }} pl-5 pr-6 py-5 flex items-center gap-3 border-b border-slate-100 dark:border-slate-800">
+      <span class="text-2xl" role="img">{{ icon }}</span>
+      <h2 class="font-bold text-lg text-slate-900 dark:text-white">{{ section.section_title }}</h2>
+    </div>
+
+    <div class="p-6">
+      {# Week in review paragraph #}
+      {% if section.week_in_review %}
+      <p class="text-slate-700 dark:text-slate-300 text-sm leading-relaxed mb-5">
+        {{ section.week_in_review }}
+      </p>
+      {% endif %}
+
+      {# Key stories #}
+      {% set stories = section.get('key_stories', []) %}
+      {% if stories %}
+      <div class="space-y-4 mb-5">
+        {% for story in stories %}
+        <div class="pb-4 {% if not loop.last %}border-b border-slate-100 dark:border-slate-800{% endif %}">
+          <h3 class="font-semibold text-slate-900 dark:text-white mb-1.5 leading-snug hover:text-amber-600 dark:hover:text-amber-400 transition-colors">
+            {% if story.source_url %}
+            <a href="{{ story.source_url }}" target="_blank" rel="noopener noreferrer">{{ story.title }}</a>
+            {% else %}{{ story.title }}{% endif %}
+          </h3>
+          <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed mb-1.5">{{ story.summary }}</p>
+          <span class="text-xs text-slate-400 dark:text-slate-500">{{ story.source_name }}</span>
+        </div>
+        {% endfor %}
+      </div>
+      {% endif %}
+
+      {# Deep read recommendation #}
+      {% set deep_read = section.get('deep_read_recommendation', {}) %}
+      {% if deep_read and deep_read.title %}
+      <div class="p-4 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-xl">
+        <p class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-2">📚 Deep Read</p>
+        <a href="{{ deep_read.url }}" target="_blank" rel="noopener noreferrer"
+           class="font-medium text-sm text-amber-600 dark:text-amber-400 hover:underline">
+          {{ deep_read.title }}
+        </a>
+        {% if deep_read.why %}
+        <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">{{ deep_read.why }}</p>
+        {% endif %}
+      </div>
+      {% endif %}
+    </div>
+  </div>
+  {% endif %}
+{% endfor %}
+
+{# ── PATTERN OF THE WEEK ── #}
+{% if digest.pattern_of_the_week %}
+<div class="mt-4 mb-10 p-6 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-2xl">
+  <p class="text-xs font-semibold tracking-widest uppercase text-amber-400 dark:text-amber-600 mb-3">Pattern of the Week</p>
+  <p class="text-base leading-relaxed">{{ digest.pattern_of_the_week }}</p>
+</div>
+{% endif %}
+
+{% endblock %}

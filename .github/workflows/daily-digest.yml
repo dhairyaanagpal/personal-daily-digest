@@ -1,0 +1,62 @@
+name: Daily PDD Digest
+
+on:
+  schedule:
+    # 2:30 AM UTC = 8:00 AM IST
+    # GitHub Actions cron can be delayed 5-15 min, so actual delivery ~8:00-8:15 AM IST
+    # Runs Monday through Saturday (Sunday is skipped in main.py)
+    - cron: '30 2 * * 1-6'
+
+  workflow_dispatch:
+    # Allows manual trigger from GitHub Actions UI for testing
+    inputs:
+      dry_run:
+        description: 'Dry run (skip Gemini, use sample data)'
+        required: false
+        default: 'false'
+        type: choice
+        options: ['false', 'true']
+
+permissions:
+  contents: write  # needed to push generated HTML back to the repository
+
+jobs:
+  generate-digest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10  # kill if the pipeline takes too long
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Cache pip dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run PDD Agent
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          REDDIT_CLIENT_ID: ${{ secrets.REDDIT_CLIENT_ID }}
+          REDDIT_CLIENT_SECRET: ${{ secrets.REDDIT_CLIENT_SECRET }}
+          DRY_RUN: ${{ github.event.inputs.dry_run || 'false' }}
+        run: python src/main.py
+
+      - name: Commit and push new digest
+        run: |
+          git config user.name "PDD Agent"
+          git config user.email "pdd-agent@users.noreply.github.com"
+          git add docs/
+          git diff --cached --quiet || git commit -m "📰 Daily digest: $(date -u +%Y-%m-%d)"
+          git push

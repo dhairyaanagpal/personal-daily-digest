@@ -1,0 +1,167 @@
+[
+  {
+    "title": "EU Finalizes AI Act Implementation Guidelines for High-Risk Systems",
+    "url": "https://example.com/eu-ai-act-implementation",
+    "source_name": "MIT Tech Review",
+    "source_type": "rss",
+    "topic": "ai_policy",
+    "summary": "The European Union published detailed implementation guidelines for the AI Act, giving companies a clear roadmap for compliance with high-risk AI system requirements.",
+    "published_at": "2025-03-27T06:00:00+00:00",
+    "score": null,
+    "comment_count": null
+  },
+  {
+    "title": "India Announces National AI Mission with Rs 10,000 Crore Budget",
+    "url": "https://example.com/india-national-ai-mission",
+    "source_name": "Inc42",
+    "source_type": "rss",
+    "topic": "india",
+    "summary": "The Indian government unveiled a comprehensive National AI Mission with a budget of Rs 10,000 crore aimed at establishing India as a global AI hub by 2030.",
+    "published_at": "2025-03-27T04:30:00+00:00",
+    "score": null,
+    "comment_count": null
+  },
+  {
+    "title": "Anthropic Releases Claude Code with Autonomous Agent Capabilities",
+    "url": "https://example.com/claude-code-launch",
+    "source_name": "Anthropic Blog",
+    "source_type": "rss",
+    "topic": "ai_tools",
+    "summary": "Anthropic shipped Claude Code, an AI-powered coding tool that can autonomously write, test, and deploy code. Major upgrade over the previous iteration with improved context handling.",
+    "published_at": "2025-03-26T18:00:00+00:00",
+    "score": 450,
+    "comment_count": 312
+  },
+  {
+    "title": "Product Managers Shifting to 'AI-First' Roadmapping — Survey of 500 PMs",
+    "url": "https://example.com/ai-first-pm-survey",
+    "source_name": "Lenny's Newsletter",
+    "source_type": "rss",
+    "topic": "product_management",
+    "summary": "A new survey of 500 product managers reveals 73% are now using AI tools in their daily workflow, with roadmapping and user research seeing the highest adoption.",
+    "published_at": "2025-03-27T07:00:00+00:00",
+    "score": null,
+    "comment_count": null
+  },
+  {
+    "title": "LinkedIn Carousel Posts See 4x Engagement vs Video for B2B Content",
+    "url": "https://example.com/linkedin-carousel-study",
+    "source_name": "Social Media Examiner",
+    "source_type": "rss",
+    "topic": "content_creators",
+    "summary": "New research shows LinkedIn carousel posts with 5-8 slides in the 'problem-solution' format are generating 4x more engagement than short-form video for B2B creators in 2025.",
+    "published_at": "2025-03-26T14:00:00+00:00",
+    "score": null,
+    "comment_count": null
+  },
+  {
+    "title": "OpenAI Launches GPT-5 with Multimodal Reasoning and Extended Context",
+    "url": "https://example.com/gpt5-launch",
+    "source_name": "OpenAI Blog",
+    "source_type": "rss",
+    "topic": "ai_tools",
+    "summary": "OpenAI officially released GPT-5, featuring a 200k token context window, native multimodal input, and significantly improved reasoning benchmarks over GPT-4o.",
+    "published_at": "2025-03-27T05:00:00+00:00",
+    "score": 892,
+    "comment_count": 1204
+  },
+  {
+    "title": "Responsible AI Coalition Publishes Deepfake Detection Standards",
+    "url": "https://example.com/deepfake-detection-standards",
+    "source_name": "The Verge",
+    "source_type": "rss",
+    "topic": "ai_policy",
+    "summary": "A coalition of major tech firms and academic institutions published the first industry-wide standards for deepfake detection, establishing a watermarking framework for AI-generated media.",
+    "published_at": "2025-03-26T16:00:00+00:00",
+    "score": null,
+    "comment_count": null
+  },
+  {
+    "title": "Zomato Reports Record Q3 with 40% Revenue Growth, Eyes Southeast Asia",
+    "url": "https://example.com/zomato-q3-results",
+    "source_name": "Entrackr",
+    "source_type": "rss",
+    "topic": "india",
+    "summary": "Zomato posted its best quarter ever with Rs 4,800 crore revenue, a 40% YoY jump, and announced plans to expand into Thailand and Vietnam in FY26.",
+    "published_at": "2025-03-27T08:00:00+00:00",
+    "score": null,
+    "comment_count": null
+  },
+  {
+    "title": "Show HN: I built an AI PM that writes PRDs from voice memos",
+    "url": "https://news.ycombinator.com/item?id=12345678",
+    "source_name": "Hacker News",
+    "source_type": "hackernews",
+    "topic": "product_management",
+    "summary": "Built this after getting tired of context-switching between voice notes and Notion. Records your voice, transcribes, extracts user stories, and formats a full PRD.",
+    "published_at": "2025-03-27T03:00:00+00:00",
+    "score": 287,
+    "comment_count": 143
+  },
+  {
+    "title": "Instagram Algorithm Update Favors 'Story-First' Reels — Creator Report",
+    "url": "https://example.com/instagram-algorithm-2025",
+    "source_name": "Later.com Blog",
+    "source_type": "rss",
+    "topic": "content_creators",
+    "summary": "Creators are reporting a significant reach boost from Reels that start with a story hook in the first 3 seconds before showing the 'value drop'. Hook formats matter more than ever.",
+    "published_at": "2025-03-26T12:00:00+00:00",
+    "score": null,
+    "comment_count": null
+  },
+  {
+    "title": "Cursor AI Editor Raises $100M Series B, Crosses 1M Daily Active Users",
+    "url": "https://example.com/cursor-funding",
+    "source_name": "TechCrunch",
+    "source_type": "rss",
+    "topic": "ai_tools",
+    "summary": "Cursor announced a $100M Series B at a $1B valuation, citing 1 million daily active developers. Plans to expand enterprise features and launch a team collaboration mode.",
+    "published_at": "2025-03-27T10:00:00+00:00",
+    "score": 734,
+    "comment_count": 521
+  },
+  {
+    "title": "r/ProductManagement: How are you using AI for user research? Megathread",
+    "url": "https://reddit.com/r/ProductManagement/comments/sample123",
+    "source_name": "Reddit r/ProductManagement",
+    "source_type": "reddit",
+    "topic": "product_management",
+    "summary": "Top responses include using Claude for qualitative interview synthesis, Dovetail AI for pattern recognition across 100+ user interviews, and custom GPTs for competitive analysis.",
+    "published_at": "2025-03-26T22:00:00+00:00",
+    "score": 1892,
+    "comment_count": 347
+  },
+  {
+    "title": "India Passes Digital Personal Data Protection Rules — Key Provisions Explained",
+    "url": "https://example.com/india-dpdp-rules",
+    "source_name": "Inc42",
+    "source_type": "rss",
+    "topic": "india",
+    "summary": "India's Ministry of Electronics published the final DPDP rules, mandating data localization for sensitive data, consent frameworks for minors, and a 72-hour breach notification window.",
+    "published_at": "2025-03-26T11:00:00+00:00",
+    "score": null,
+    "comment_count": null
+  },
+  {
+    "title": "UN Adopts First Global AI Safety Resolution — What It Means",
+    "url": "https://example.com/un-ai-safety-resolution",
+    "source_name": "MIT Tech Review",
+    "source_type": "rss",
+    "topic": "ai_policy",
+    "summary": "The UN General Assembly adopted a landmark resolution on AI safety, calling for international cooperation on risk assessment and establishing an advisory body on AI governance.",
+    "published_at": "2025-03-27T09:00:00+00:00",
+    "score": null,
+    "comment_count": null
+  },
+  {
+    "title": "Twitter X Algorithm Boosting 'Thread + Carousel' Hybrid Posts in March",
+    "url": "https://example.com/twitter-algorithm-march",
+    "source_name": "Buffer Blog",
+    "source_type": "rss",
+    "topic": "content_creators",
+    "summary": "Data from 10,000 creator accounts shows Twitter/X is giving outsized reach to posts that combine a short thread (3-5 tweets) with an embedded image carousel. Engagement rate up 60%.",
+    "published_at": "2025-03-26T09:00:00+00:00",
+    "score": null,
+    "comment_count": null
+  }
+]
