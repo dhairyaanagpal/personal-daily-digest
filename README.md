@@ -1,4 +1,4 @@
-# Personal Daily Digest (PDUse this to understand about the product. D Agent)
+# Personal Daily Digest (Use this to understand about the product)
 
 An automated morning intelligence briefing that runs every day at **8:00 AM IST** — no subscriptions, no paywalls, no noise.
 
