@@ -27,6 +27,10 @@ _PROJECT_ROOT = Path(__file__).parent.parent
 if str(_PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(_PROJECT_ROOT))
 
+# ─── Load .env file (must happen before any code reads os.environ) ───────────
+from dotenv import load_dotenv
+load_dotenv(_PROJECT_ROOT / ".env")
+
 # ─── Logging setup (must happen before any imports that use logger) ────────────
 logging.basicConfig(
     level=logging.INFO,

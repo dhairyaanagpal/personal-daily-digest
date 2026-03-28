@@ -1,103 +1,782 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Morning Briefing — March 28, 2026</title>
+  <title>Weekly Roundup — March 28, 2026 — PDD</title>
+
+  <!-- Tailwind CSS via CDN — no build step needed -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Inter"', 'system-ui', 'sans-serif'],
+            serif: ['"Playfair Display"', 'Georgia', 'serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          },
+          colors: {
+            amber: { 400: '#fbbf24', 500: '#f59e0b', 600: '#d97706' },
+          },
+          animation: {
+            'fade-up': 'fadeUp 0.5s ease forwards',
+          },
+          keyframes: {
+            fadeUp: {
+              '0%': { opacity: '0', transform: 'translateY(16px)' },
+              '100%': { opacity: '1', transform: 'translateY(0)' },
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+  <!-- Custom styles -->
+  <link rel="stylesheet" href="style.css" />
+
+  <style>
+    /* Staggered fade-in for sections */
+    .section-card { opacity: 0; animation: fadeUp 0.5s ease forwards; }
+    .section-card:nth-child(1) { animation-delay: 0.1s; }
+    .section-card:nth-child(2) { animation-delay: 0.2s; }
+    .section-card:nth-child(3) { animation-delay: 0.3s; }
+    .section-card:nth-child(4) { animation-delay: 0.4s; }
+    .section-card:nth-child(5) { animation-delay: 0.5s; }
+
+    /* Section color pills */
+    .pill-purple  { background: #ede9fe; color: #7c3aed; }
+    .pill-teal    { background: #ccfbf1; color: #0f766e; }
+    .pill-orange  { background: #ffedd5; color: #c2410c; }
+    .pill-green   { background: #dcfce7; color: #15803d; }
+    .pill-pink    { background: #fce7f3; color: #be185d; }
+
+    /* Dark mode pills */
+    .dark .pill-purple  { background: #3b0764; color: #c4b5fd; }
+    .dark .pill-teal    { background: #042f2e; color: #5eead4; }
+    .dark .pill-orange  { background: #431407; color: #fed7aa; }
+    .dark .pill-green   { background: #052e16; color: #86efac; }
+    .dark .pill-pink    { background: #500724; color: #f9a8d4; }
+
+    /* Section header border colors */
+    .border-purple { border-color: #7c3aed; }
+    .border-teal   { border-color: #0f766e; }
+    .border-orange { border-color: #c2410c; }
+    .border-green  { border-color: #15803d; }
+    .border-pink   { border-color: #be185d; }
+
+    /* Smooth scrollbar */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #94a3b8; border-radius: 3px; }
+
+    /* Story card hover */
+    .story-card { transition: transform 0.15s ease, box-shadow 0.15s ease; }
+    .story-card:hover { transform: translateY(-2px); }
+  </style>
 </head>
-<body class="bg-slate-950 text-slate-200 min-h-screen font-sans">
-  <div class="max-w-3xl mx-auto px-4 py-10">
-    <div class="mb-6 p-4 bg-amber-900/30 border border-amber-700 rounded-xl text-amber-300 text-sm">
-      ⚠️ <strong>AI synthesis unavailable</strong> — showing raw headlines. Full synthesis will resume at next run.
+
+<body class="bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-200 transition-colors duration-300 min-h-screen font-sans">
+
+  <!-- TOP BAR -->
+  <div class="sticky top-0 z-50 bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm border-b border-slate-200 dark:border-slate-700">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <span class="text-amber-500 text-lg">📰</span>
+        <span class="font-semibold text-sm text-slate-600 dark:text-slate-400 tracking-wide uppercase">Personal Daily Digest</span>
+      </div>
+      <button
+        id="darkModeToggle"
+        onclick="toggleDark()"
+        class="p-2 rounded-full text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+        title="Toggle dark mode"
+        aria-label="Toggle dark mode"
+      >
+        <span id="darkIcon" class="hidden dark:inline">☀️</span>
+        <span id="lightIcon" class="dark:hidden">🌙</span>
+      </button>
     </div>
-    <h1 class="text-4xl font-bold text-white mb-1">Morning Briefing</h1>
-    <p class="text-slate-400 mb-8">Saturday, March 28, 2026</p>
-    
-        <section class="mb-8">
-          <h2 class="text-lg font-bold text-white mb-3 flex items-center gap-2">
-            <span>🔬</span>AI Policy & Responsible Tech
-          </h2>
-          <ul class="bg-slate-900 border border-slate-700 rounded-xl p-4 text-sm"><li class="py-2 border-b border-slate-800 last:border-0"><a href="https://news.google.com/rss/articles/CBMi2gFBVV95cUxNMUpsTGpDell1aVhwMDFpVnF6QWNxbzRueXp5bmxhdlAtZmc4Zy1YZWFpMURFeGhtZEdMTHh6b2hUUVRBVTNWVDZYeTd5WkwweG9lSG9xMWd1bXItT1FTakJRM1lEcEVoNG1HMlBDTWJsdjBZZUlrSTh0dU9zTkJiY21RYVRHODVORVJBS0ljNTBCdGJrX2dvWl91MWVuR2hwbzZPYlZGREpITmFPNVMzcXVXMkZ6MUE1R3hFcnc5MDRGWW9kLWZCS2h2dk1aVmdpWnU3bXhzblh2Zw?oc=5" target="_blank" class="text-slate-300 hover:text-amber-400 transition-colors">White House National AI Policy Framework Calls for Preempting State Laws, Protecting Children - Crowell & Moring LLP</a><span class="ml-2 text-xs text-slate-500">— Google News</span></li>
-<li class="py-2 border-b border-slate-800 last:border-0"><a href="https://news.google.com/rss/articles/CBMiiAFBVV95cUxOclYta3RyNkp5SVg2dF9PdlAydDhCNXNlZ2F0THFfcnJXODZ0b1k0TzhTNjc3QXlXQTEyOWpkWC1WVnFDdDFnSWdNOHZDdkR5SVM5a3ZudUdUZ3ctSG1vNHpuNEI0d29vX2tzRmx1SGtHQjJHay02djZDaFRQQVp0V054bmRFMXVZ?oc=5" target="_blank" class="text-slate-300 hover:text-amber-400 transition-colors">Global AI Law and Policy Tracker: Highlights and takeaways - IAPP</a><span class="ml-2 text-xs text-slate-500">— Google News</span></li>
-<li class="py-2 border-b border-slate-800 last:border-0"><a href="https://news.google.com/rss/articles/CBMid0FVX3lxTFBZajNnOGhXZDZpcUpFdWRHQmROc3dFWkhJbjZsekU1MEY5MXYteGZCbWc5ZkpabmVSZTg1RTVEMXhHdmtiT3hKbTN0UTdjZzB3a1dKTkN5TE15RU1ZQVp5ZXJjcXdhQXZKd1JLRkFoVmx2Y0hnM05R?oc=5" target="_blank" class="text-slate-300 hover:text-amber-400 transition-colors">Guidance on AI and children | Office of Strategy and Evidence Innocenti - unicef.org</a><span class="ml-2 text-xs text-slate-500">— Google News</span></li>
-<li class="py-2 border-b border-slate-800 last:border-0"><a href="https://news.google.com/rss/articles/CBMiiAFBVV95cUxQQzdSUlZLWEJ4bGJqLVlzdkE5TzIzMTRqbDR0Y25IWG5Lb2FfcjlkNW5faGY3eUNmMVdtOVBPM0JNY0ZHYWlRZFpGV24tWHVfZ2FUREh3ZUF2Mi1pYkppcEt1YWd4alV2Z2dpY2hWWHYtQnVheVhPdFMzSWVNWC0tdUZVZHJiRHBY?oc=5" target="_blank" class="text-slate-300 hover:text-amber-400 transition-colors">AI governance guidelines: A bet on innovation - ey.com</a><span class="ml-2 text-xs text-slate-500">— Google News</span></li>
-<li class="py-2 border-b border-slate-800 last:border-0"><a href="https://news.google.com/rss/articles/CBMiX0FVX3lxTE9QdDF5MnR0VGgydkowWndzam1xQ1lCNnU5alNReTdLVnNSYi1BS1hpd2dnTll4dW5kT3J3X1hoRlQzLTlTcjFHUEFySEFIRXFqaXFERDVGd1NGWElrb29N?oc=5" target="_blank" class="text-slate-300 hover:text-amber-400 transition-colors">Let 2026 be the year the world comes together for AI safety - Nature</a><span class="ml-2 text-xs text-slate-500">— Google News</span></li>
-<li class="py-2 border-b border-slate-800 last:border-0"><a href="https://news.google.com/rss/articles/CBMilAFBVV95cUxPRkNLNnA5WHFkSVJ4YWtTZ29PXzdRWDEwcWF0ZENNRjBvbW90NTJuYTg4UUVESUZUSkNrc1dzcm9rYjNvc05TSWtoY0hGQjBYZmVzSFF4U0toZFk0Y3VTS0JYQk9hRGhtLW42YkVZNHRCT1AyamhmWGdwUUhpNTR3dTF2a0ZzUDIzRnlmeGZRX0VSYV8x?oc=5" target="_blank" class="text-slate-300 hover:text-amber-400 transition-colors">China resets the path to comprehensive AI governance - East Asia Forum</a><span class="ml-2 text-xs text-slate-500">— Google News</span></li>
-<li class="py-2 border-b border-slate-800 last:border-0"><a href="https://news.google.com/rss/articles/CBMilAFBVV95cUxOTzV4X2hETVF3ZjYxWGtlQ1A3LUhsTFQ0emlrTUl2c0wwU2F3SjJ0Q2tEdmZqSlpuaFZtbEdWTzhKUW1MZ19BNTBvbF9hc1dZN3Ryd1FaRTgtQ19LYmZuYjJNUzVFZkptUTRRQVFLVTYzNnI2LXhhNGM5eXVlZDdPTjQ4QlV1WkVnTlh3OEtzSG10X2l2?oc=5" target="_blank" class="text-slate-300 hover:text-amber-400 transition-colors">What It Will Take for India’s New AI Governance Guidelines to Work - Tech Policy Press</a><span class="ml-2 text-xs text-slate-500">— Google News</span></li>
-<li class="py-2 border-b border-slate-800 last:border-0"><a href="https://news.google.com/rss/articles/CBMinAFBVV95cUxOMFIwUWthTUFhd1V4eHkweW82cWVCX0wtR3pjWVMxaS12MFdkTWZCS2ZEM1dpNWxPeHJDMk5lbmZlbzRNRi1UVUtMNUlMU0hBNldnM211UV81aGtBMkRRNlczdzJEeGxFZDZMdmdOb0V1SHBmTWJYaGtEOER3bUZMZldMX3V4S3h4cGdadXM3Y3JpeWl6XzFJYmV4X2E?oc=5" target="_blank" class="text-slate-300 hover:text-amber-400 transition-colors">AI Watch: Global regulatory tracker - United Kingdom - White & Case LLP</a><span class="ml-2 text-xs text-slate-500">— Google News</span></li>
-<li class="py-2 border-b border-slate-800 last:border-0"><a href="https://news.google.com/rss/articles/CBMitgFBVV95cUxOVVpCcXk1ODZ2dXdnNjl4RmZkRzc3cERmdXRWTlpjN3QxNndNMmFBQUlKY09ZWHN2eFdJZGZmbWNZVEJQbXJxU1dOT0IwUXJPQUg1Z3pGYUhXLW1IZHlCODdCNUxYTlVfTnhKMlpoTzFZT0ZpeXdRUDBza1R6WjRKbkVqbEU0N0xvY3U0NG1aQXF3LTJ3MDRCblhJX2lJQ0Rud1NGMlkzNFlIckwzTGxyVHpTMHo4UQ?oc=5" target="_blank" class="text-slate-300 hover:text-amber-400 transition-colors">The Next Phase of AI: Technology, Infrastructure, and Policy in 2025–2026 - The American Action Forum</a><span class="ml-2 text-xs text-slate-500">— Google News</span></li>
-<li class="py-2 border-b border-slate-800 last:border-0"><a href="https://news.google.com/rss/articles/CBMilwFBVV95cUxQU0hSek50MnAwclRIQnZOanZDZi13S2EyeF9vSkllYTVERWl0Tk1XVnVLMDhEc3ZuMmpTWUI4blh1QjBxVjZhXzM5RnpORzA2U1BLd3I0TUR6Yy1pSGRsQWRUNGpXWVl3eHRUaGpMaWZhX1RQdVdZcEJ5TmxsMndqLTZBd244OFpEdWJZWlA3OUtZMDUwaUxZ?oc=5" target="_blank" class="text-slate-300 hover:text-amber-400 transition-colors">Why AI policy thrives in some states and fades in others - Brookings</a><span class="ml-2 text-xs text-slate-500">— Google News</span></li></ul>
-        </section>
-        
-        <section class="mb-8">
-          <h2 class="text-lg font-bold text-white mb-3 flex items-center gap-2">
-            <span>📋</span>Product Management in the AI Era
-          </h2>
-          <ul class="bg-slate-900 border border-slate-700 rounded-xl p-4 text-sm"><li class="py-2 border-b border-slate-800 last:border-0"><a href="https://news.google.com/rss/articles/CBMikAFBVV95cUxOSkJLemF3amZoQU9YLTg4WGlkZG1JcVVqcmYyaS1RSFFZNVkyQ1RHRHNUTS02M3FIYm5Sb21HNUs0cGlGYks2X3pLeHk2RENpX210YkdUV2pVcWFuWUFDdGVrZXFpZTF3cGF4R0M0Zi1HYV8xVFZTUllVVUNETzAyaXpGS2V1VUtBejM4NnU2LW4?oc=5" target="_blank" class="text-slate-300 hover:text-amber-400 transition-colors">To Drive AI Adoption, Build Your Team’s Product Management Skills - Harvard Business Review</a><span class="ml-2 text-xs text-slate-500">— Google News</span></li>
-<li class="py-2 border-b border-slate-800 last:border-0"><a href="https://news.google.com/rss/articles/CBMimwFBVV95cUxONktoMXlucGxHakFIZHhCN2dmY21ra3FmR1BQYnBHZ3MwcnhnSWVacVFZbG1GaERDNmRkYWs0dXhVSWpvc2dRbW12QmY1YUY5OE9RN0tWb2FlTHEzbDgtM2ZnZGRaZS1aVlkxN1p2d3VWNnpBTHZuU3R3R1JqSzdTQ3VMaVJpYWN3TWpPeFVId2k5bzBIcEZNeVZtRQ?oc=5" target="_blank" class="text-slate-300 hover:text-amber-400 transition-colors">AI Product Manager Course Starts on APR 6, 2026 - Great Andhra</a><span class="ml-2 text-xs text-slate-500">— Google News</span></li>
-<li class="py-2 border-b border-slate-800 last:border-0"><a href="https://news.google.com/rss/articles/CBMipAFBVV95cUxPczBiZmViaFhHTGNOcGxjU3NnZkUwODNGcGVwNTJ5dkZRR3VpaTVVNmhSUEpyeWw1ZC1SM3BoMUI0TVN3dldFZkdjQVUtQlg4SFVHN3RQWmJVSHVSX1pCM3FqbWI4RTdPQy1iOXBIQzJTNng0SVlJUDJXU2d6Ry1DYjhnVm5wYk9hd3ViZmdTY0MtY3R6eDhaS0lMQW5La0dBTEN1NA?oc=5" target="_blank" class="text-slate-300 hover:text-amber-400 transition-colors">Top 9 AI Tools I Use Every Day as a Product Manager - DataDrivenInvestor</a><span class="ml-2 text-xs text-slate-500">— Google News</span></li>
-<li class="py-2 border-b border-slate-800 last:border-0"><a href="https://news.google.com/rss/articles/CBMiakFVX3lxTE5lZmQxOGdXMlpQLW5EU1Q1TmM4NkxDTHNFc19Zal9keUhpZGt0N0V0Q3h4QVZLN2p2ZURSdlFKYk81NWcycWxoLUNGc2RmRENYQmh3NmdxYXlXa3dKdmZZN2wtYk9TbGFVUmc?oc=5" target="_blank" class="text-slate-300 hover:text-amber-400 transition-colors">AI in Product Development - IBM</a><span class="ml-2 text-xs text-slate-500">— Google News</span></li>
-<li class="py-2 border-b border-slate-800 last:border-0"><a href="https://news.google.com/rss/articles/CBMinAFBVV95cUxQZGFoWDRWS1lxTmRlaEE4LV9CeE1JVG90ckNwQVhFby0wZ2pjMHRhNXU2R0Qzc2FXMU4xTHhoX3V1R0txNk56aUZQem5LREVOQWJNYkNzOEp6YklCeW1FdWFNX2tKMTV6WXdMelFrbG4taC1NSldWNW1OaXV4Q1BnWC1nd29TUTVtUGxCajBNTEdnUkh5T0k4dnJ6WUc?oc=5" target="_blank" class="text-slate-300 hover:text-amber-400 transition-colors">How AI and Vibe Coding Transform Product Management - Integrated Innovation Institute - Carnegie Mellon University</a><span class="ml-2 text-xs text-slate-500">— Google News</span></li>
-<li class="py-2 border-b border-slate-800 last:border-0"><a href="https://news.google.com/rss/articles/CBMixgFBVV95cUxPVzR5TEQtZUV3MjBUSWVSelZiNER2UWJVR2lobVpISjdzenduT1h5bTlVejJLdDdaQWdIZmZteE1YMWRwTUw0TFBUa2ZBOVdYR0lQOVEwUFVwNkNlRVdlaVlpdzViTDktcGZaUnFYU0RCU0dla1JCZ3ZEaFVWbHA1SWd0Rll5Q1pJR2NvNzY1WmVMcUxWMXBxSm1EbWlNcTR4OFk3UjB1N2FaOGhVLVpHQy1PdHhwenlKVThoQ3BlSmJwQkpmM3c?oc=5" target="_blank" class="text-slate-300 hover:text-amber-400 transition-colors">The Frontier Firm: How knowledge workers are forging their own AI tools at Microsoft - Microsoft</a><span class="ml-2 text-xs text-slate-500">— Google News</span></li>
-<li class="py-2 border-b border-slate-800 last:border-0"><a href="https://news.google.com/rss/articles/CBMiggFBVV95cUxNNENNUTN6Vi1VTjhBd0VuTGZEWTBiUXBpTTczYXNpRjhxUGZqYlNNSnQ5eGRqcC01VVhRNTUtZkc4eUNNSkRidWhLTU1NZjBodGNFUVA4NGlfbUpSX21tc21wbU14clZnWHFTR0t6c0dFR25lbUxqNmU1RTNYRmdHVnlB?oc=5" target="_blank" class="text-slate-300 hover:text-amber-400 transition-colors">The Future of Product Management Is AI-Native - O'Reilly Media</a><span class="ml-2 text-xs text-slate-500">— Google News</span></li>
-<li class="py-2 border-b border-slate-800 last:border-0"><a href="https://news.google.com/rss/articles/CBMitwFBVV95cUxOTFJBb0N5S3BaYUlvekRVM092bjFCSjBtdkNIZHB1REdVd2s5ekNDRlhPeE84RkdLYW0zR0hEU2JoenFOcTE3czRBZ0NFeEJMS3hlaEhpYkdVVlZtXzUxRGRKR2VvaEJpVDdxMEhIbklPcEs2RnJsQ1Y5WVJfeFRqUS1iMWo2WW5yd1NJeHBlV0QwQzFQNHR4V0dXZUxaMFVqRnVMVDRlbVNJU3NKd09FcVNEbFdKODA?oc=5" target="_blank" class="text-slate-300 hover:text-amber-400 transition-colors">Why SaaS Product Management Is the Best Domain for Data-Driven Professionals in 2026 - Towards Data Science</a><span class="ml-2 text-xs text-slate-500">— Google News</span></li>
-<li class="py-2 border-b border-slate-800 last:border-0"><a href="https://news.google.com/rss/articles/CBMimAFBVV95cUxNb2haa3NrZmtaY05mM1ZvV25zTENjRlVzcVp2ZTZUc0tUWllQdjRvNU9DS0M3cUw2REozVklZbE1ZSXI0cGxtLUhoT0VJOGw4UDVzN0dxR2VJSzBibVFLT0F0dU1sa2JLM0J0Vl9IYlpQTVBHYjFDWnpNbVE2clNTbzJzV0RUTV9ZT1lTTTEzekhmWU5POUg5aw?oc=5" target="_blank" class="text-slate-300 hover:text-amber-400 transition-colors">Five strategies for deeper AI adoption at work - blog.google</a><span class="ml-2 text-xs text-slate-500">— Google News</span></li>
-<li class="py-2 border-b border-slate-800 last:border-0"><a href="https://news.google.com/rss/articles/CBMif0FVX3lxTE5TY2s2cERucW16SzZQUXQyeEY3N0tPNDVfNlFzQWtTaE9HcDZ2MG5vRG10d0hmdmpiendRUzNoVkFLUm5PbEFqeDNxMHpNa2I0eXZmY0ZXdWNSNmt6WWVlUlJUM0o2SmNJT1pVX092alNKRWhwMkZrVWJSV1NvRk0?oc=5" target="_blank" class="text-slate-300 hover:text-amber-400 transition-colors">Top 10 Use Cases of Generative AI in Digital Product Development - appinventiv.com</a><span class="ml-2 text-xs text-slate-500">— Google News</span></li></ul>
-        </section>
-        
-        <section class="mb-8">
-          <h2 class="text-lg font-bold text-white mb-3 flex items-center gap-2">
-            <span>⚡</span>AI Tools & Launches
-          </h2>
-          <ul class="bg-slate-900 border border-slate-700 rounded-xl p-4 text-sm"><li class="py-2 border-b border-slate-800 last:border-0"><a href="https://news.google.com/rss/articles/CBMi-gFBVV95cUxPZlRCc3MyRWh2SEJ1Ym9FWWtjQkNiUE5UaXVPTzJmWFlfc3MtWEpFcTlxRk9CNl9sU19jY3JYNUMxRWxSTFppQzlLSmhCR253eHlqRFg4XzgxRzYwNXNEemlEWFFndDdwd1Jjd3hFbTlyZ1Y0TjhXeFpZRG9qam9xSG54WjRqUWhrODIyWldmblBrVnUwalpGZVI1QUUxaUpsUnFJb1ROaEs3WGVIcHJYLXlsZURGUWVuWVRPdlZLekRWTXRudjlGeHN4MThQVTNmNTByQzlIQ19KV0FTSWJ5bk1YSEVOc2l5MEgzX2ZuNXNlRlJnaHVWR1hn0gH_AUFVX3lxTE82Zk16N3pqeGVCa0QwTW9NZm5Kd2NmMHpKTmZkNVhESWpQbG1RNW53ckl3MGpjRjRvUFQxc2Vyb1BCOW5JYjJvN0Z6b0tQRExqb1NSN21LSmdLWkJISkVBbGlIckE3VzdiOXB1eHZYUjdNSDlhdGdtWVYyQnJuUnN2ZnhJMnBnNXZFa3BKRWMzQ0NMTERfVWhnSE4wYjdjaERBeXVkanU1UmFadGlDaTViRDNlc0lLY0Vnc3dCWW15N05ocDI2NlhIU2RkUjEwNmhuVUhwS0l6eWlDTFd4MnR6cnF4aS1fN3RwZG1HakpLRXd1QW16c2R3V3BPWnNiQQ?oc=5" target="_blank" class="text-slate-300 hover:text-amber-400 transition-colors">Hey Anthropic, take a break: From SaaS apocalypse to Dispatch, Claude AI is on a tear with updates - India Today</a><span class="ml-2 text-xs text-slate-500">— Google News</span></li>
-<li class="py-2 border-b border-slate-800 last:border-0"><a href="https://news.google.com/rss/articles/CBMiZEFVX3lxTE5qVHdwODZzd291WGF2emtGbDRMTk9KSWlKbVRVMWR6THZMaFJlRlJOeTE2MWEtYU1RdU9rYnA4RUp6Y2ZPaWoyMGVpMV9qRjRmODlKMDlleFhYWEw4WUdwaXJ6Yks?oc=5" target="_blank" class="text-slate-300 hover:text-amber-400 transition-colors">Long-running Claude for scientific computing - Anthropic</a><span class="ml-2 text-xs text-slate-500">— Google News</span></li>
-<li class="py-2 border-b border-slate-800 last:border-0"><a href="https://news.google.com/rss/articles/CBMixgFBVV95cUxQNTRvNEZSejZIanpaTlRTcURtNUt6MWJIN3dRNjlpVXNoekh0UndKV1A5VHZYTmdfM0F6SHlmZ2o1UkVLdm0zQVJVVl9DY3E0a0FRX3RsOTM0Smw3YVhsX29NcEdxbGlyaWQxN2JPQUFGek5EWC0yazRIWXlZWm5GeXRmaWFGQ3BvaXY3SDNwdTFZSmFEVHkyTzFsalVucWtLd0Q1OTR0WXNqU09jaDVBVnVuY2V0WEFIbnJpdzVnWmljcGY0T2fSAcwBQVVfeXFMTXFYZnliZE5EcE9yanF3MEZHS1RITjIyV1RoNnFrVFJ5SDBPY1dyOUprVThiRE5kTzlKRHhGNVAxRkFCWklYOUxMa2h1OUpZVXNhaTJNZkVhNTZ0bTdTd1dOcXFkelk2YzNlMXk2NWZtYTNRaDB3WWkyZDI3M1c1R3BWSjgzYUNQei12YzRwcW96WlFfQUZEc205S3VMV1l2UThIRWFMUVpONlN2THZZalJWWWR0ZnktY00xN0VGdDV2WEh1UnJ4ZUdjVHV2?oc=5" target="_blank" class="text-slate-300 hover:text-amber-400 transition-colors">Anthropic’s Claude can now use your computer like a human: Will it replace OpenClaw? - The Indian Express</a><span class="ml-2 text-xs text-slate-500">— Google News</span></li>
-<li class="py-2 border-b border-slate-800 last:border-0"><a href="https://news.google.com/rss/articles/CBMikgFBVV95cUxOUjI0ZnpMRjJlSTc1ampPUW5kRlJ2dktsMGhVMmFtYmlpSEd5RjZzRkxxdG9fYnIxZVZSVlZXQlBzOF9VRXdkVmJrcHQ3ajFEV1pIMUxNQzRTQmRzR3NVQ3FFcDJxa29tUU8tS21BTTIwZnl6WC1CYzhLdFZoMzBsV1hOeDN2aEFKV3ppZ2ZPTTBhQdIBlwFBVV95cUxQSWNYT1JYME5aQ0JuejlBY3Jab01MS1V2Z0pIOFZIZlBDWjZnc183SmdpaXMyNk01STBmbzIxM0ZOZktRRkNTdHhKcHZJNTNoeFZjTWNVcVZRN1hTVGRKRmN3ZDY3R3ZyUEZ5UmpWQmY5WmhTazZOQVI4MHA3SGNqbTFaNmI3cDRkRUQ1a092RGZfaVFZcndV?oc=5" target="_blank" class="text-slate-300 hover:text-amber-400 transition-colors">Anthropic says Claude can now use your computer to finish tasks for you in AI agent push - CNBC</a><span class="ml-2 text-xs text-slate-500">— Google News</span></li>
-<li class="py-2 border-b border-slate-800 last:border-0"><a href="https://news.google.com/rss/articles/CBMi9gFBVV95cUxOc3U4aHpxSHVYclhyZWF6WE1RdFZ4blQ4RHBwZ2dKX1BhWVBUMUd3b3N2VkQwRHhCRU96YWRGR2hoWURUVTNUYS1xTEpTWFFMM18wYU1QdDRSYTBHVVJVX1k4NVYzRllJeTEwbnppMmhkYmdBYnFqQjl2cEtueGh4VXRUTkl1WDZ5QXdlTXJwakw1OXZ5Q0ctUF95VTc4X3lEVnA0RkRYRFlmOUY0OGVJeUFqZTJTc0FqalJ0S3M1bkxhbXk2LVFPdWRpSWliVW5nNG1veXk4TjNmRGtYell5cUNIR21YQ0x6NE5QVmp2em40QndLQ1HSAfsBQVVfeXFMUE94VnFVNkQ2RU5fVzROXzZ6SWt4QjBVSjl1VHQycTJFNXNlazlTekVGX1JXbUY4ZmZZNzlfMnNRNWo4MU5PcXZTR1Y5aUxhSjVKZWl2Z1NPcUNQbHdHWUFPY2ZQUmFWbVpNTS1USV81N3dtcFhja1hOSUZTaG13bW03ZFpURGsxUmRjTVlkMWlSbi1qSEd3dktsMXNtNk9jZWN6MWRHT0NhN0RXMUQyd3BacDFVMGU1anRMWFhQYXBZWFVMSVo3cFY0Yzl4YTVaWW5WblRhYnBJSDJrMFVmLV9jVG5WdVl2REJNdGVTNGJYX3dKQmNXaE8yS00?oc=5" target="_blank" class="text-slate-300 hover:text-amber-400 transition-colors">Anthropic to everyone: Switch to Claude without ‘Starting Over’, here’s what it means - The Times of India</a><span class="ml-2 text-xs text-slate-500">— Google News</span></li>
-<li class="py-2 border-b border-slate-800 last:border-0"><a href="https://news.google.com/rss/articles/CBMioAFBVV95cUxQRHJiUVFhX0dvRUNOeUFFZk1naTNLLTJQcS1CSTI1a3BCQzBUQWZjWThDcF9NX0FDWVIyYjgtOWVmX3ZKN2hSMlZhbENROVY2MVdpT3VVanp2UlhfYjV1Y0MyV2otNlc5UVRfaUxpd0VLbzNTUkg5eHJkcURJLXl1X2xLZFM0Vm84Y0lSZUpuZlRFOUZTOFJ2dWFHRFg2YWdn?oc=5" target="_blank" class="text-slate-300 hover:text-amber-400 transition-colors">Anthropic hands Claude Code more control, but keeps it on a leash - TechCrunch</a><span class="ml-2 text-xs text-slate-500">— Google News</span></li>
-<li class="py-2 border-b border-slate-800 last:border-0"><a href="https://news.google.com/rss/articles/CBMirwFBVV95cUxPQ3QtYnBaRHpST3lXSHJnTkxMY1pMbkxOMFFybVZXRHoyaEZNX1VVaXYxQ1l0eUJlalVLZ19UU3ZHODMyUDhGTWRfSFktc2JlNDVEb01LdDVLQzNGNzFSalhtVEswSEVNcG1VSjhPTzhCYmpjUFBJUGlEQW5LYzNsbkRDVnVmVUpjbUg4R21USG9LMFNoUGg5VjJGeW5rSjAwMGoyU29qRXhTWVBxZm5F?oc=5" target="_blank" class="text-slate-300 hover:text-amber-400 transition-colors">Anthropic Launches Feature to Bring Memory From ChatGPT, Gemini to Claude - Analytics India Magazine</a><span class="ml-2 text-xs text-slate-500">— Google News</span></li>
-<li class="py-2 border-b border-slate-800 last:border-0"><a href="https://news.google.com/rss/articles/CBMiZkFVX3lxTE40V2dUYUUwdG5IQm9WUDMxZUlRSWhWSFZOWTczeUxUZTcyaFN4SFZMLTVndGpPYlRqN0ZRQVFtTWhScDRlNGdXaDFwMElJcU5wUGo5N3VFRnlBN3dLQWp2S0k5MUE3QQ?oc=5" target="_blank" class="text-slate-300 hover:text-amber-400 transition-colors">Anthropic’s Claude Code Shows How Far AI Coding Tools Have Come - Built In</a><span class="ml-2 text-xs text-slate-500">— Google News</span></li>
-<li class="py-2 border-b border-slate-800 last:border-0"><a href="https://news.google.com/rss/articles/CBMiswFBVV95cUxQQmZLV05DWExTMTJaMTlxeV83Z3I5eEpXUnpkam0zOXFBQ2RlRE1La1dTSmxVcUc5ek1jTHV6UXl6MXY0THFiZjJFMGNSLUpwdThYOXRvU2szVHhmWnkxbUstNGktektfUVB6eEZaLWlHcF9oamJIZHRsaWF0WHktaGlSd1MxNzVuUVRwZVZ5QU8xUTNIOFUtemxBN2Nad2puVVBUSU1uY3h0NnVzS2w3dTgtQQ?oc=5" target="_blank" class="text-slate-300 hover:text-amber-400 transition-colors">Anthropic gives Claude shared context across Microsoft Excel and PowerPoint, enabling reusable workflows in multiple applications - VentureBeat</a><span class="ml-2 text-xs text-slate-500">— Google News</span></li>
-<li class="py-2 border-b border-slate-800 last:border-0"><a href="https://news.google.com/rss/articles/CBMid0FVX3lxTE4wWmNjQ0ZmZGo3Y3BPeGpRb2xDb0RXbkYwOEpycEJfNDh6S1JDdzN3Q1plYkRUclJ3Y0FhN1pMRzZnTlVHRWRkaC1xMnhUMkx1U0dIaVVVckNybjFSanZGaldLamtkTlBwM2hUMHZWdDFtZkhvb3pn?oc=5" target="_blank" class="text-slate-300 hover:text-amber-400 transition-colors">Anthropic's Claude AI Can Now Use Your Mac While You're Away - MacRumors</a><span class="ml-2 text-xs text-slate-500">— Google News</span></li></ul>
-        </section>
-        
-        <section class="mb-8">
-          <h2 class="text-lg font-bold text-white mb-3 flex items-center gap-2">
-            <span>🇮🇳</span>India — Broad Landscape
-          </h2>
-          <ul class="bg-slate-900 border border-slate-700 rounded-xl p-4 text-sm"><li class="py-2 border-b border-slate-800 last:border-0"><a href="https://news.google.com/rss/articles/CBMipAFBVV95cUxPNFA3bkJpbEhZbUxMRzAyOUQtYm5TQVFuVkp6Zzk3cHZrNEFWVFduMFU4VGNHcnIwdl8xWWQ2WVNIclBiX1loei1PWU5LTlNmblE3QUZ5SlRTSmZ2cUh6eWVyV2hwMHZvazZ6eEtJWUtoQ2hCSzhDQ2daWU9GWnNWVE1QTFYtMUFRV0hkVFlacEc3TWI2Ri1qZ3p0cGFvc1VXUE9RSQ?oc=5" target="_blank" class="text-slate-300 hover:text-amber-400 transition-colors">Government Convenes All-Party Meeting this Evening to Discuss West Asia Conflict - News On AIR</a><span class="ml-2 text-xs text-slate-500">— Google News</span></li>
-<li class="py-2 border-b border-slate-800 last:border-0"><a href="https://news.google.com/rss/articles/CBMioAFBVV95cUxNbmEyN0pFVVUxeXV6MTY2eXNqREUyeEhnSmhtSk5JdG00TDVORTNtX1RTUEtUTS1odzNodTctZmg4UmpIcTVReElVeHZpSFNwZ1FyajczeDUyWHhkQ3J0ZHM3UXZFckU2UWJjZm9Na29weDJSbWl3b0pQSmxfMWlGMjFSV1FOdmd2b1dhVGFKZzZzY0FCUWdjMGItV2lMU0xS?oc=5" target="_blank" class="text-slate-300 hover:text-amber-400 transition-colors">India news: Government cuts excise duties on petrol, diesel - dw.com</a><span class="ml-2 text-xs text-slate-500">— Google News</span></li>
-<li class="py-2 border-b border-slate-800 last:border-0"><a href="https://news.google.com/rss/articles/CBMikwFBVV95cUxPY1Z2QzdOb2phaXNnM2FaRzBXNUkyOU1jb08xLUZ1aVVMQmVuRS1NMVBOREw5cmRqRmc0Z3NwS19YUGEzR2NoVEhaTnI1WjRJdXNhNUE0T29Damt6Ym9ZT25HVll6dFdqc0prN0FLY2pHOHktR2lyd3ZFbjZUNGVDOGJGNzBKN2Y5Vmk1cUtQUkpnQkU?oc=5" target="_blank" class="text-slate-300 hover:text-amber-400 transition-colors">Post-Truth Republic: Politics And Power In Today’s India - Madras Courier</a><span class="ml-2 text-xs text-slate-500">— Google News</span></li>
-<li class="py-2 border-b border-slate-800 last:border-0"><a href="https://news.google.com/rss/articles/CBMizAFBVV95cUxOa3o1Nkt1WnVGbEFXOTNGWDRoU25tVXZXa2JtSUk1X0pJQXJ5NEJ4Um5NV2tmOUdzVW9yc2ZSZ2o0dDFHMWRMV0VRaV9fTGdhOHFhT1VuaWRKRjl1c1lRdjd4ZnBlajVrcGNKZ2tYa1c1NjFwc0V4VjRmcnAyaW9xOTVPZ3lNWUowVXM0dkI0OGxwR25XOHRMRnN5U1pfTU5jekRNODUwSGkwX21wNUMyNlJSZzRwcmFGWlBOMG5LSVhjWEktNUR5NnEyRjLSAdIBQVVfeXFMTXZrUng1dmhtSFFJRXVSZEVCbkdvWTZ1cGxPWnVUdHNPM1FCSXgxQkxZeEs2ckZtWlZGcjE4cmMwY1BpaGJPd09oMzlwZkZjemVHZTdqb3A2YWJsWVF4aEtVczJ1TU1CU295Ml8zLXFpWGJyY3E3dFd0Qmt1OENJaTFoMW1JTVpIOFBLeUlINHZueVdoOE1yV2NLaGVXTHFnNmNZME85SjRzbDZXQXVtY0lBc0h2X2R6LWF6elJ5V0x5UXY2a0VobWhtOUFFT0NIYUxR?oc=5" target="_blank" class="text-slate-300 hover:text-amber-400 transition-colors">The JJ Juggernaut: Peak of 'Puratchi' Politics - India Today</a><span class="ml-2 text-xs text-slate-500">— Google News</span></li>
-<li class="py-2 border-b border-slate-800 last:border-0"><a href="https://news.google.com/rss/articles/CBMiqwFBVV95cUxPQjVadDEyTHh3TWNPVGlKT1ptOE12ZUR1cVJfXzQwSDdfakI3RGNnX3d2ODc2RDBVamxFb0hIWk1KMTBudnNyc3hYdU1rbFZoRXVYdlZjWFVFR1lTMS1raERKajhKck1pZlBpMVZzSjZzcHlJMy1VeHhlNWxtTHRHZklxeFlUaEFGZXFLZFhKLVV6cE9raVdHenJ0NnJ6eExkVWlnY2tMUmZ0LVk?oc=5" target="_blank" class="text-slate-300 hover:text-amber-400 transition-colors">India news: Loni is world's most polluted city, report says - dw.com</a><span class="ml-2 text-xs text-slate-500">— Google News</span></li>
-<li class="py-2 border-b border-slate-800 last:border-0"><a href="https://news.google.com/rss/articles/CBMizAFBVV95cUxQZjFHYWxKVFdkLWNzTHBmM1U4NDlUMTdGT2pXSkVxNGIyMWNBVnBpMENJTm5ta3VsZklyX3FYOGZtcFJMNmlMLVlPTzhiZDBLMWFJOWt6dGJ3NUVYcU5oajZxaU5vcmxTX3d3bWxaZkhpNGdHUUgyUm1fcHRHb1RNN2ZfcEYybVhpTlYtRnNRMlJxc0lXdDd0Z1V6US1NRmZ4U2dxQmdldFUxYWNOSjRlRUMyc1hVb3d5NGx6eHdNblUtYm9ZUUFSa1c0ZnnSAdIBQVVfeXFMT2laaVpuMTIzNVZDWDhiOTcxRzNkQmNxMHJnNkd4bUVGZ3V2bnctWU0xZUpKODdiSEo1MUFTOEhiMGV4NnNhRE5Ea0gtanR5SzFCRGZvS3BkTGxKbjdXTXBiU2hlaTlTNlp3QzN4SzhKb3Q5MUVDM0NCY0wzb0pIbmlXSkROU3ZvMGE0aUJ6WGZMYllpM2RUblVyZThVdWJwMWZqSXJrVWc1eG9odno0RlZaUFN6M2gweVRqWjFaTE5fVmk3WDlsT3ZsMWNkRzFvbEVn?oc=5" target="_blank" class="text-slate-300 hover:text-amber-400 transition-colors">27 years of age, 30 years of politics: Assam's 2026 ballot has room for both - India Today NE</a><span class="ml-2 text-xs text-slate-500">— Google News</span></li>
-<li class="py-2 border-b border-slate-800 last:border-0"><a href="https://news.google.com/rss/articles/CBMibkFVX3lxTE5TQ3pOWXFHRFpfeTB2bVdwazQzeWR3YVR3RTFsYlJRcU1ad3p2dllLaEQ0ODY5RTFORGFEbURmbUFzSG8zMkQwVTlFemVXZExNVFR5QzRPbGFVb2JBWXpaZEw4SVJVMDFTdi1LMnFB?oc=5" target="_blank" class="text-slate-300 hover:text-amber-400 transition-colors">India’s Modi in Israel: What to Know? - Politics Today</a><span class="ml-2 text-xs text-slate-500">— Google News</span></li>
-<li class="py-2 border-b border-slate-800 last:border-0"><a href="https://news.google.com/rss/articles/CBMiqwFBVV95cUxNaHpCUGk0QmhFSVIwTG9pS2xkWFpybWNxeWRJZ3BOZkdsSVA5RWNSQWlXeFBnQmpDVnVvcjNWOC1nOFliczZ3RDBMY0E4TGg4S29mYmQxaktYcVE5VkthQ1BHcDRVZmppeGoyeDB0dy01cWFTaWZ1X2phRE9aWFdIRjV3SXRRWlZEa2Qxajdmb1RKbE4wZlF4SHBjOGRITXFtRDhIS2p1WlNtclHSAbIBQVVfeXFMTXNjSnFreDhScTVRUnc2Ty1jYTlMeEcxOHRySVB3UTZCeDZxaURlTDFScURyWmtYVXlmWldxYXhOdDUzWnZJNWJwRlhoUms3cFAyNW1UOHhrTjdnTXk4WE9WLWZuTGdpQ3lGM2JGTUc1U3hqenREaTFUNTlSZHZvRGxrdDhOaFRmdl9qWkswZjQ0dlFwZlItV1V5RFkxMmZpUU5uc3VqTlQzVnlCNGp3eVF6UQ?oc=5" target="_blank" class="text-slate-300 hover:text-amber-400 transition-colors">How the Absence of Shame is Reshaping Indian Democracy - Frontline Magazine</a><span class="ml-2 text-xs text-slate-500">— Google News</span></li>
-<li class="py-2 border-b border-slate-800 last:border-0"><a href="https://news.google.com/rss/articles/CBMiYkFVX3lxTE9nUVliTEdOek5JZlFnOFpXb2c0VGUzOTJmYWFTWjdKb2dzVFNGMlJrQ2JHY1NraU96NXp0NnY3NkQyQUx4X1RBQjlNVDNpV1Q2ckk5bnVBVE1ibkJWXzlMaTRR?oc=5" target="_blank" class="text-slate-300 hover:text-amber-400 transition-colors">Yogi Adityanath - Britannica</a><span class="ml-2 text-xs text-slate-500">— Google News</span></li>
-<li class="py-2 border-b border-slate-800 last:border-0"><a href="https://news.google.com/rss/articles/CBMiV0FVX3lxTFB1OW5oX2I1NjJ6Z2VySk42S05LTGtTa2hKbGpaTkk2bnVvd1hDTWVNR181V2hrd3VSQzA4ZlhCd0NlZWdWd3Q4Q0tYckZSZ2JiMzI3REFMUQ?oc=5" target="_blank" class="text-slate-300 hover:text-amber-400 transition-colors">Farooq Abdullah attack: Video shows moment gunshot misses Kashmir ex-chief minister - BBC</a><span class="ml-2 text-xs text-slate-500">— Google News</span></li></ul>
-        </section>
-        
-        <section class="mb-8">
-          <h2 class="text-lg font-bold text-white mb-3 flex items-center gap-2">
-            <span>📱</span>Content Creator Trends
-          </h2>
-          <ul class="bg-slate-900 border border-slate-700 rounded-xl p-4 text-sm"><li class="py-2 border-b border-slate-800 last:border-0"><a href="https://news.google.com/rss/articles/CBMiVkFVX3lxTE5ZV1Rycnh4NVl4cjQ0VDFGeU9lbFhqalpYOTNFQTctQkE0RkVqM25QbW56bTlrNHJ6T2J4YngtazZxVzdJaDFEUm11bEpXVUNOb2lkYTB3?oc=5" target="_blank" class="text-slate-300 hover:text-amber-400 transition-colors">Instagram Reels for business in 2026: Best practices + examples - Hootsuite Blog</a><span class="ml-2 text-xs text-slate-500">— Google News</span></li>
-<li class="py-2 border-b border-slate-800 last:border-0"><a href="https://news.google.com/rss/articles/CBMiW0FVX3lxTE0ydFlEZDBFbjRhUmJvUHl4Sl8xOW1NOEVjSFhFMGFwNkV4dzlSdlJNNFJjLUV4dUhwbmxzNDNKTVZKdENKS0x6aGlxRXdMMnFaQ184MzI0ZHFZQmM?oc=5" target="_blank" class="text-slate-300 hover:text-amber-400 transition-colors">Top 10 Trending Songs on Instagram This Week | August 28 2025 - metricool.com</a><span class="ml-2 text-xs text-slate-500">— Google News</span></li>
-<li class="py-2 border-b border-slate-800 last:border-0"><a href="https://news.google.com/rss/articles/CBMiqwFBVV95cUxNVFBjckV4YldJcHlxZmJvVVA4eXJYdDlycUlpd2VzWEZ5dWxXRmdEcEVNVWVBT1E3Wkk0TXVWTngyNmxoeGhPY0x5UG93bW5pRDhYY1pRVndtVlRRTF9pVzNnNUFZalZDcW1tR2xHZy1XVHFjaS1PSDZDb1c2OW5qREFmMnlmcTRMVHdCSDhRcFFRcXdBQVBYQXZvZkRjZmVkWWtPbjBnVjBMeFU?oc=5" target="_blank" class="text-slate-300 hover:text-amber-400 transition-colors">Instagram reels, destination weddings, funky jewellery mark 2025 wedding trends - Daily Pioneer</a><span class="ml-2 text-xs text-slate-500">— Google News</span></li>
-<li class="py-2 border-b border-slate-800 last:border-0"><a href="https://news.google.com/rss/articles/CBMiZEFVX3lxTFBQcUVqbDNVS2UxU1pKb1JQcS0wcjVEbDlINFpjd1Yza2ZUX25CR1ZoTGhOT3hXb0pfUGVrc3RXN1k5R25hczlWb01aNWhtNU9fXzBOUFpxR3FTY1AyS2N4VjZKSlHSAWpBVV95cUxQX3JjRUw2UmVxSnZaa1Izc1hBQ3R5OXJPUnJubjRDelRwc0duZEVCbXRmcmlKc1RtXy1TcHduRlROb3NfaGh4T3VnZUpFMWd1a0dmVUtGblRobGRNZ09EWFNsRFNFbExXeHVn?oc=5" target="_blank" class="text-slate-300 hover:text-amber-400 transition-colors">7 social media trends you need to know in 2026 - Sprout Social</a><span class="ml-2 text-xs text-slate-500">— Google News</span></li>
-<li class="py-2 border-b border-slate-800 last:border-0"><a href="https://news.google.com/rss/articles/CBMizAFBVV95cUxONWY1N3RLQndSOExHYjdvRm5leGp5TGtnTC1rU3FPT2RKM1VYNjg4Qm5CQ2xsQWdoX1gzQV9HdndSRGV2Q3ZpcjJnTVdkeVNfZEwxWi1oVUlZVEpFU2pTcElDbDZfdFRpWDdpRTZPdnBVaGhIWGt0bGxPUENBU1F3enA3U3dpUWpFYlNaSVZvSFFXMWVRX1gzS1YxRUxYRTVVMFdjTENKam1CNU5wZjdXVWc1dWt6SURscUtBMU90anIzWjNfZmdQVk1YdzLSAdIBQVVfeXFMTXFHUVNHZjdGZ3ppY29BTXNUaXdrNldDU1dBWVVQMGNwOGUyUFJ2dC1aYzlNZVR4WE01MnRTYzhsenBzaFhPcTNyM1VKeWpEY2lqbno4RlFnNUJJN3R0cGlpa0ZyRGRpcmNCeTJTM2UzYlZJbVNLelJsZE5GZk9ZaG5wTEhEN1l4NGJRT1JpdklGS1JaSVFnTW11LTdYdTVhRGhnQ0VXUGNTZlZUVXgxVllYdVA0VG5pOTVlUmNISjZ3WXNnTHRzaGV1MGI4dXpQaDRB?oc=5" target="_blank" class="text-slate-300 hover:text-amber-400 transition-colors">From Instagram reels to multi-day destination weddings: India’s 2025 wedding trends - Mathrubhumi English</a><span class="ml-2 text-xs text-slate-500">— Google News</span></li>
-<li class="py-2 border-b border-slate-800 last:border-0"><a href="https://news.google.com/rss/articles/CBMiUEFVX3lxTE1LcTNsY1JlUkkxR2NJVHFIelZVZURnbzZsdlRQNG9YWHJaNWktOGtZSVhLcmFzM0gzTGJFME9jZGR3NjJ5Zml0WTlsOHd3Ni1m?oc=5" target="_blank" class="text-slate-300 hover:text-amber-400 transition-colors">5 Current Instagram Trends for Social Media Managers in 2026 - metricool.com</a><span class="ml-2 text-xs text-slate-500">— Google News</span></li>
-<li class="py-2 border-b border-slate-800 last:border-0"><a href="https://news.google.com/rss/articles/CBMiwgFBVV95cUxNekVYRWktRXdyb1c0RncxckRMUU8yc2liWkxPTDlaRks0X1RLOXZwRS1Uc2g2N2lyZWQ2SVYtZ1pUSlNXblpueEk1TXdLRFlkWHlZZm5NTVdZVFY2b1hNZHA0M1V6MEFpMWNCNUd5a0lGRW9mLUpCU0FRVmpDMUlBMW1KOEhUOGpDMm5pVk40MlVDRlVRLW5oMU9kUURhVW8zN1ktcXBUZGxLMENXSnctdXhDNFhMdElKOTQ2WHpNN1dqQdIBxwFBVV95cUxPV3JoZld6MXdKcmxtcVB3ZjdNREZKZG51WE1jbWJTZkp4Z3ZtQkUwZFFkb3hhUHJaOVhGRF9EZWhCUW1uOHNkMjNWUks0VWNHaVJvdkxiV0xZNktrM2taVmZRbVlKZ0Y0SkxqaUhoRXVyc21USFNpcFNUQkkxTzZhVVpfb09BSDZoYUsxVHU1Vlp6M3JTQklucjQ1V3Z2dEQxYUE1VEczQ3dHNkFOR0N5cy1OS0NJTUxtOE9TakViMTh0c2VmY0F3?oc=5" target="_blank" class="text-slate-300 hover:text-amber-400 transition-colors">India’s Instagram Trends in 2025: Cricket, Culture, and Viral Moments That Kept Users Engaged - Republic World</a><span class="ml-2 text-xs text-slate-500">— Google News</span></li>
-<li class="py-2 border-b border-slate-800 last:border-0"><a href="https://news.google.com/rss/articles/CBMi5gFBVV95cUxONktfZ2lBMzVQS0RqT2lFc0NON2w5NkhGVVFlZUNhSUtHNUVFVmF4LU5sX1p1MFlOOWVfRTFaTzlmX05OMklZcGxER1NDc0lBYTdlQ0NwM3BKNFZVbDNXelh1aU9BVm1NVkpKekZUYnRQWjNuVHBMWmRFVHRUZzRkcDRhVWhmdzNfc3BFakZMUjZFdTdOUVRSNmJhZVZFdFVqWVlFSkVDX2ctaUdrRmhZYWJlcGZHUWhtZVFmOTdrVUpoQTgxSzFUbHZIbWdjWWV2d2hNMDNaSGRQYjlxQ1dRSjBzTHVwZ9IB6wFBVV95cUxOWFpXY1RkekJwYWY4MWlxMmFtMHZkakNFenFES3BDSHdDa1l6bm9MV3RmZnhySC1BYndxNnU4eHNWaTI1YTZtYThheHB6RlpxcXZTUVBqRFNVZERzaC1DTGFjbWpSYkRmd2d6ME1NelY5S2hVRk4wVlhFUmRVMUVESVB4djYxc19kM1dHZzFFSVBkbFpTd0JSUXJhRFpuajRZeV9IUUVYN1p4Z1lqVm40MWM4UUFBM2pkUGFmWDlQTGk2b1V0NmdZRW1XZWpXcFZ6SVZaMnh1X19IV1RJRGtLUFFacUtTdXlFRVdV?oc=5" target="_blank" class="text-slate-300 hover:text-amber-400 transition-colors">The 12 most viral meme moments and trends that ruled the internet in 2025 - The Times of India</a><span class="ml-2 text-xs text-slate-500">— Google News</span></li>
-<li class="py-2 border-b border-slate-800 last:border-0"><a href="https://news.google.com/rss/articles/CBMiYEFVX3lxTE9XZ2FYMDExcnYxdXVpa0U2bkoyZGdNb1JEYzFGU0tMYnRzREphOGthYXNSVHhYUThpQnVYTm1kb1RFenYwUlN1Umo2cEVVTUhFSC1WWDBQMjJINjB6NmNoWg?oc=5" target="_blank" class="text-slate-300 hover:text-amber-400 transition-colors">60+ social media statistics marketers need to know in 2026 - Hootsuite Blog</a><span class="ml-2 text-xs text-slate-500">— Google News</span></li>
-<li class="py-2 border-b border-slate-800 last:border-0"><a href="https://news.google.com/rss/articles/CBMic0FVX3lxTE9KQ3BxMVFFQ1l4UEY2MUktQzdnNXgxaEZlTko0LTREVmI5WDNOV1h3aHZFTk9IN3N2Q3V3S2IxVDBWQkhLTmUyMG9rY1FwZklqOHpERm9tSEh1eUNlMnVrd0ozYUpVSUtJRE5mUl8xTnRxZkE?oc=5" target="_blank" class="text-slate-300 hover:text-amber-400 transition-colors">TikTok vs Instagram Reels Statistics - Which is Better? (2025) - ElectroIQ</a><span class="ml-2 text-xs text-slate-500">— Google News</span></li></ul>
-        </section>
-        
-    <footer class="border-t border-slate-800 pt-6 mt-10 text-xs text-slate-500 text-center">
-      Generated by PDD Agent (fallback mode)
-    </footer>
   </div>
+
+  <!-- MAIN CONTENT -->
+  <main class="max-w-4xl mx-auto px-4 sm:px-6 py-8">
+    
+
+
+<header class="mb-10">
+  <div class="flex items-center gap-2 mb-3">
+    <span class="text-xs font-semibold tracking-widest uppercase text-amber-500">Saturday Edition — Weekly Roundup</span>
+  </div>
+  <h1 class="font-serif text-4xl sm:text-5xl font-extrabold text-slate-900 dark:text-white leading-tight mb-2">
+    The Week in Review
+  </h1>
+  <p class="text-lg text-slate-500 dark:text-slate-400">March 28, 2026</p>
+</header>
+
+
+
+<section class="mb-10">
+  <div class="p-6 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-700/50 rounded-2xl">
+    <p class="text-xs font-semibold tracking-widest uppercase text-amber-600 dark:text-amber-400 mb-3">This Week at a Glance</p>
+    <p class="text-slate-700 dark:text-slate-300 text-base leading-relaxed">This week saw a significant focus on AI governance and policy, with discussions ranging from the chaotic behavior of AI agents to national strategies for AI development in Korea and China. Concurrently, the impact of AI on product management continued to be a hot topic, exploring how it&#39;s reshaping product development and buyer expectations. In India, the startup ecosystem showed robust activity with substantial funding rounds and several IPO filings, alongside important regulatory updates. New AI tools and hardware innovations also emerged, demonstrating the rapid pace of technological advancement.</p>
+  </div>
+</section>
+
+
+
+
+<section class="mb-12">
+  <div class="flex items-center gap-3 mb-5">
+    <div class="h-1 w-8 bg-amber-500 rounded-full"></div>
+    <h2 class="text-xs font-semibold tracking-widest uppercase text-amber-600 dark:text-amber-400">Stories That Defined the Week</h2>
+  </div>
+
+  <div class="space-y-4">
+    
+    <div class="group relative bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-2xl p-6 story-card shadow-sm hover:shadow-md hover:border-amber-300 dark:hover:border-amber-600">
+      <div class="absolute -top-3 -left-3 w-8 h-8 rounded-full bg-amber-500 text-white text-sm font-bold flex items-center justify-center shadow-sm">
+        1
+      </div>
+
+      
+      <div class="mb-3">
+        <span class="pill-purple text-xs font-semibold px-2.5 py-1 rounded-full">
+          AI Policy &amp; Responsible Tech
+        </span>
+      </div>
+
+      <h3 class="font-semibold text-lg text-slate-900 dark:text-white mb-2 leading-snug">
+        AI agents are running wild, causing chaos – so why isn’t anyone stopping them?
+      </h3>
+      <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed mb-3">
+        This article highlights growing concerns about autonomous AI agents operating without sufficient oversight, leading to unpredictable and potentially disruptive outcomes. It matters because the proliferation of such agents necessitates urgent discussions around robust governance frameworks and ethical guidelines to prevent unintended consequences. Moving forward, expect increased calls for international cooperation and regulatory action to establish clear boundaries and accountability for AI agent deployment.
+      </p>
+      
+      <a href="https://news.google.com/rss/articles/CBMigAFBVV95cUxNSm55NUZxTm5WMkVGbUh2WXNVU2dTTEplSHVYMGtJTGdpX2o2cWgzQmdSZ25CSUZJUTRWLWpaOHNLRkxpQnRKNnBSUzF6TjBKUDVhTzNrbUFsZXNKNE1VT0RpM2U3ZVRfRWF5eFBDV0RzS01DdlhueVYxaHJTbS1Icg?oc=5" target="_blank" rel="noopener noreferrer"
+         class="inline-flex items-center gap-1 text-xs font-medium text-amber-600 dark:text-amber-400 hover:text-amber-700 dark:hover:text-amber-300 transition-colors">
+        Read full story →
+      </a>
+      
+    </div>
+    
+    <div class="group relative bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-2xl p-6 story-card shadow-sm hover:shadow-md hover:border-amber-300 dark:hover:border-amber-600">
+      <div class="absolute -top-3 -left-3 w-8 h-8 rounded-full bg-amber-500 text-white text-sm font-bold flex items-center justify-center shadow-sm">
+        2
+      </div>
+
+      
+      <div class="mb-3">
+        <span class="pill-green text-xs font-semibold px-2.5 py-1 rounded-full">
+          India — Broad Landscape
+        </span>
+      </div>
+
+      <h3 class="font-semibold text-lg text-slate-900 dark:text-white mb-2 leading-snug">
+        From Euler Motors To Rocketlane — Indian Startups Raised $343 Mn This Week
+      </h3>
+      <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed mb-3">
+        Indian startups collectively raised a substantial $343 million this week, indicating continued investor confidence despite global market volatility. This matters as it signals resilience and growth potential within India&#39;s tech ecosystem, providing capital for innovation and expansion across various sectors. Looking ahead, this trend suggests a healthy appetite for investment in promising Indian ventures, potentially leading to more unicorns and job creation.
+      </p>
+      
+      <a href="https://inc42.com/buzz/from-euler-motors-to-rocketlane-indian-startups-raised-343-mn-this-week/" target="_blank" rel="noopener noreferrer"
+         class="inline-flex items-center gap-1 text-xs font-medium text-amber-600 dark:text-amber-400 hover:text-amber-700 dark:hover:text-amber-300 transition-colors">
+        Read full story →
+      </a>
+      
+    </div>
+    
+    <div class="group relative bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-2xl p-6 story-card shadow-sm hover:shadow-md hover:border-amber-300 dark:hover:border-amber-600">
+      <div class="absolute -top-3 -left-3 w-8 h-8 rounded-full bg-amber-500 text-white text-sm font-bold flex items-center justify-center shadow-sm">
+        3
+      </div>
+
+      
+      <div class="mb-3">
+        <span class="pill-teal text-xs font-semibold px-2.5 py-1 rounded-full">
+          Product Management in the AI Era
+        </span>
+      </div>
+
+      <h3 class="font-semibold text-lg text-slate-900 dark:text-white mb-2 leading-snug">
+        How AI is Breaking and Remaking the Way Products are Built
+      </h3>
+      <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed mb-3">
+        This piece delves into the transformative impact of AI on the entire product development lifecycle, from ideation to deployment. It matters for product managers as it outlines new methodologies, skill sets, and challenges emerging in an AI-first world, pushing for adaptation and re-evaluation of traditional PM roles. The future will likely see product teams increasingly leveraging AI for insights, automation, and personalized user experiences, demanding a deeper understanding of AI capabilities and limitations.
+      </p>
+      
+      <a href="https://news.google.com/rss/articles/CBMijwFBVV95cUxOb1k2elJiLXVWUnNsSVIyN18tN2dzR2twcDR0X3J5dzZ3RDBGcVgwVU1uQ3JwR0o4MWYwa19PY0I1bGF6Zmk0bVliUE9VSDlUNF9FazBNbWFiektFWEZqVlBab1hNTkktcXRzVExuMlVzU2c2UEl0QzY5WG84SDRwT1QxNW1BLTg0SFNNRnVRcw?oc=5" target="_blank" rel="noopener noreferrer"
+         class="inline-flex items-center gap-1 text-xs font-medium text-amber-600 dark:text-amber-400 hover:text-amber-700 dark:hover:text-amber-300 transition-colors">
+        Read full story →
+      </a>
+      
+    </div>
+    
+    <div class="group relative bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-2xl p-6 story-card shadow-sm hover:shadow-md hover:border-amber-300 dark:hover:border-amber-600">
+      <div class="absolute -top-3 -left-3 w-8 h-8 rounded-full bg-amber-500 text-white text-sm font-bold flex items-center justify-center shadow-sm">
+        4
+      </div>
+
+      
+      <div class="mb-3">
+        <span class="pill-purple text-xs font-semibold px-2.5 py-1 rounded-full">
+          AI Policy &amp; Responsible Tech
+        </span>
+      </div>
+
+      <h3 class="font-semibold text-lg text-slate-900 dark:text-white mb-2 leading-snug">
+        China&#39;s open-source AI ecosystem facilitates sovereign AI development in Global South: experts
+      </h3>
+      <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed mb-3">
+        Experts highlight China&#39;s growing open-source AI ecosystem as a catalyst for sovereign AI development in countries across the Global South. This is significant because it offers an alternative to Western-dominated AI frameworks, potentially fostering greater digital autonomy and tailored solutions for developing nations. In the coming years, this initiative could reshape global AI power dynamics and accelerate technological advancement in regions seeking self-reliance in AI.
+      </p>
+      
+      <a href="https://news.google.com/rss/articles/CBMifEFVX3lxTE82RWx2cWxBNk1KOS1XSjNvNUFLS1JZaFpYdWtfM3BoWWZFaFdjT2dXSTVuZjk0dVBPaXI2dEpBTTlRX2ZCeFlVTG1iRGZlVHVJVURvXy10ZGg4TlB4V1dWMWV1VXVGekUxWjg3UTVJLWM4ZGx1NDVrWDJUZHo?oc=5" target="_blank" rel="noopener noreferrer"
+         class="inline-flex items-center gap-1 text-xs font-medium text-amber-600 dark:text-amber-400 hover:text-amber-700 dark:hover:text-amber-300 transition-colors">
+        Read full story →
+      </a>
+      
+    </div>
+    
+    <div class="group relative bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-2xl p-6 story-card shadow-sm hover:shadow-md hover:border-amber-300 dark:hover:border-amber-600">
+      <div class="absolute -top-3 -left-3 w-8 h-8 rounded-full bg-amber-500 text-white text-sm font-bold flex items-center justify-center shadow-sm">
+        5
+      </div>
+
+      
+      <div class="mb-3">
+        <span class="pill-orange text-xs font-semibold px-2.5 py-1 rounded-full">
+          AI Tools &amp; Launches
+        </span>
+      </div>
+
+      <h3 class="font-semibold text-lg text-slate-900 dark:text-white mb-2 leading-snug">
+        CERN uses tiny AI models burned into silicon for real-time LHC data filtering
+      </h3>
+      <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed mb-3">
+        CERN is deploying highly optimized, silicon-embedded AI models to filter vast amounts of data from the Large Hadron Collider in real-time. This innovation is crucial for efficiently processing complex scientific data, enabling faster discovery and reducing the computational burden of traditional methods. This approach signals a future where specialized, low-latency AI hardware will become indispensable for scientific research and other data-intensive applications, pushing the boundaries of real-time analytics.
+      </p>
+      
+      <a href="https://theopenreader.org/Journalism:CERN_Uses_Tiny_AI_Models_Burned_into_Silicon_for_Real-Time_LHC_Data_Filtering" target="_blank" rel="noopener noreferrer"
+         class="inline-flex items-center gap-1 text-xs font-medium text-amber-600 dark:text-amber-400 hover:text-amber-700 dark:hover:text-amber-300 transition-colors">
+        Read full story →
+      </a>
+      
+    </div>
+    
+  </div>
+</section>
+
+
+
+<div class="flex items-center gap-4 mb-8">
+  <div class="flex-1 h-px bg-slate-200 dark:bg-slate-700"></div>
+  <span class="text-xs font-semibold tracking-widest uppercase text-slate-400 dark:text-slate-500">Section Roundups</span>
+  <div class="flex-1 h-px bg-slate-200 dark:bg-slate-700"></div>
+</div>
+
+
+
+
+  
+  
+  
+  
+
+  <div class="section-card mb-8 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-2xl overflow-hidden shadow-sm">
+
+    
+    <div class="border-l-4 border-purple pl-5 pr-6 py-5 flex items-center gap-3 border-b border-slate-100 dark:border-slate-800">
+      <span class="text-2xl" role="img">🔬</span>
+      <h2 class="font-bold text-lg text-slate-900 dark:text-white">AI Policy &amp; Responsible Tech</h2>
+    </div>
+
+    <div class="p-6">
+      
+      
+      <p class="text-slate-700 dark:text-slate-300 text-sm leading-relaxed mb-5">
+        This week underscored the escalating global conversation around AI governance and policy. From South Korea refining its AI laws based on real-world feedback to China championing an open-source AI ecosystem for the Global South, nations are actively shaping their digital futures. Concurrently, concerns about the unchecked proliferation of AI agents and their potential for chaos highlighted the urgent need for robust regulatory frameworks and ethical guidelines to ensure responsible AI development.
+      </p>
+      
+
+      
+      
+      
+      <div class="space-y-4 mb-5">
+        
+        <div class="pb-4 border-b border-slate-100 dark:border-slate-800">
+          <h3 class="font-semibold text-slate-900 dark:text-white mb-1.5 leading-snug hover:text-amber-600 dark:hover:text-amber-400 transition-colors">
+            
+            <a href="https://news.google.com/rss/articles/CBMigAFBVV95cUxNSm55NUZxTm5WMkVGbUh2WXNVU2dTTEplSHVYMGtJTGdpX2o2cWgzQmdSZ25CSUZJUTRWLWpaOHNLRkxpQnRKNnBSUzF6TjBKUDVhTzNrbUFsZXNKNE1VT0RpM2U3ZVRfRWF5eFBDV0RzS01DdlhueVYxaHJTbS1Icg?oc=5" target="_blank" rel="noopener noreferrer">AI agents are running wild, causing chaos – so why isn’t anyone stopping them?</a>
+            
+          </h3>
+          <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed mb-1.5">The Independent raises alarm bells about the lack of control over autonomous AI agents, questioning the absence of effective mechanisms to halt their potentially chaotic operations.</p>
+          <span class="text-xs text-slate-400 dark:text-slate-500">The Independent</span>
+        </div>
+        
+        <div class="pb-4 border-b border-slate-100 dark:border-slate-800">
+          <h3 class="font-semibold text-slate-900 dark:text-white mb-1.5 leading-snug hover:text-amber-600 dark:hover:text-amber-400 transition-colors">
+            
+            <a href="https://news.google.com/rss/articles/CBMiiAFBVV95cUxNNzMtTkE4QmRWakFhNXl4aTAwRFh1ckNZT1B2OHdqY1FHWFRLeGo2X1gxNktVQVBTNDZmVm5xd1A3YWM4QndvYVphV1lQSmxkeDVzb2ZrcGFmS1RtM2k2U1BUWW9MaXE4RVB1dUV4MTNNRmFCQ3I4bnZhSGhFamROTjNzOXJJSjM2?oc=5" target="_blank" rel="noopener noreferrer">Korea’s AI Law Enters Its Next Phase as Real-World Feedback Shapes Policy</a>
+            
+          </h3>
+          <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed mb-1.5">KoreaTechDesk reports on South Korea&#39;s progressive approach to AI legislation, where policy is evolving in response to practical feedback and real-world implications, setting a precedent for adaptive governance.</p>
+          <span class="text-xs text-slate-400 dark:text-slate-500">KoreaTechDesk</span>
+        </div>
+        
+        <div class="pb-4 border-b border-slate-100 dark:border-slate-800">
+          <h3 class="font-semibold text-slate-900 dark:text-white mb-1.5 leading-snug hover:text-amber-600 dark:hover:text-amber-400 transition-colors">
+            
+            <a href="https://news.google.com/rss/articles/CBMifEFVX3lxTE82RWx2cWxBNk1KOS1XSjNvNUFLS1JZaFpYdWtfM3BoWWZFaFdjT2dXSTVuZjk0dVBPaXI2dEpBTTlRX2ZCeFlVTG1iRGZlVHVJVURvXy10ZGg4TlB4V1dWMWV1VXVGekUxWjg3UTVJLWM4ZGx1NDVrWDJUZHo?oc=5" target="_blank" rel="noopener noreferrer">China&#39;s open-source AI ecosystem facilitates sovereign AI development in Global South: experts</a>
+            
+          </h3>
+          <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed mb-1.5">Xinhua highlights how China&#39;s commitment to open-source AI is empowering nations in the Global South to develop their own sovereign AI capabilities, fostering technological independence.</p>
+          <span class="text-xs text-slate-400 dark:text-slate-500">Xinhua</span>
+        </div>
+        
+        <div class="pb-4 ">
+          <h3 class="font-semibold text-slate-900 dark:text-white mb-1.5 leading-snug hover:text-amber-600 dark:hover:text-amber-400 transition-colors">
+            
+            <a href="https://news.google.com/rss/articles/CBMiqgFBVV95cUxOZElWTDVGZ01fQXA1c2hRRDllanF0QmxhMW5WREtqd1dqel9kMFptSXUzbFRVMEZRVVpWS2I3bkNoSGtXQzZ2ZFlJdzByRVhLbEsxcC1FR3otMWE5SDZRQmo3UFJTMXAxT0Rka2ZaNmhkZXZhWWlaMEl2UTZza2ZncDRmRnV2Sndhd0tfY2FsWnNZUk05VEloLU9sN3JFUEJ1RFdxaVNBMkpLUQ?oc=5" target="_blank" rel="noopener noreferrer">AI in Criminal Justice: Why Governance Matters and How to Make It Work</a>
+            
+          </h3>
+          <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed mb-1.5">Stanford Law School delves into the critical importance of robust governance for AI applications in criminal justice, outlining strategies to ensure fairness and accountability.</p>
+          <span class="text-xs text-slate-400 dark:text-slate-500">Stanford Law School</span>
+        </div>
+        
+      </div>
+      
+
+      
+      
+      
+      <div class="p-4 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-xl">
+        <p class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-2">📚 Deep Read</p>
+        <a href="https://www.technologyreview.com/2026/03/28/1134766/womans-uterus-kept-alive-outside-the-body-first/" target="_blank" rel="noopener noreferrer"
+           class="font-medium text-sm text-amber-600 dark:text-amber-400 hover:underline">
+          A woman’s uterus has been kept alive outside the body for the first time
+        </a>
+        
+        <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">While not directly AI, this MIT Technology Review piece on a groundbreaking biological feat pushes the boundaries of what&#39;s possible, prompting reflection on the ethical and societal implications of advanced technology, much like AI policy discussions.</p>
+        
+      </div>
+      
+    </div>
+  </div>
+  
+
+  
+  
+  
+  
+
+  <div class="section-card mb-8 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-2xl overflow-hidden shadow-sm">
+
+    
+    <div class="border-l-4 border-teal pl-5 pr-6 py-5 flex items-center gap-3 border-b border-slate-100 dark:border-slate-800">
+      <span class="text-2xl" role="img">📋</span>
+      <h2 class="font-bold text-lg text-slate-900 dark:text-white">Product Management in the AI Era</h2>
+    </div>
+
+    <div class="p-6">
+      
+      
+      <p class="text-slate-700 dark:text-slate-300 text-sm leading-relaxed mb-5">
+        This week highlighted the ongoing evolution of product management roles in the age of AI, with several articles emphasizing how AI is fundamentally reshaping product development and market expectations. Discussions ranged from the strategic adoption of AI within organizations to the emergence of specialized AI Product Manager courses. A particularly thought-provoking piece even questioned the traditional role of product management in the hyper-fast AI coding market, suggesting a shift in how products are conceived and built.
+      </p>
+      
+
+      
+      
+      
+      <div class="space-y-4 mb-5">
+        
+        <div class="pb-4 border-b border-slate-100 dark:border-slate-800">
+          <h3 class="font-semibold text-slate-900 dark:text-white mb-1.5 leading-snug hover:text-amber-600 dark:hover:text-amber-400 transition-colors">
+            
+            <a href="https://news.google.com/rss/articles/CBMijwFBVV95cUxOb1k2elJiLXVWUnNsSVIyN18tN2dzR2twcDR0X3J5dzZ3RDBGcVgwVU1uQ3JwR0o4MWYwa19PY0I1bGF6Zmk0bVliUE9VSDlUNF9FazBNbWFiektFWEZqVlBab1hNTkktcXRzVExuMlVzU2c2UEl0QzY5WG84SDRwT1QxNW1BLTg0SFNNRnVRcw?oc=5" target="_blank" rel="noopener noreferrer">How AI is Breaking and Remaking the Way Products are Built</a>
+            
+          </h3>
+          <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed mb-1.5">The Ken explores how artificial intelligence is fundamentally altering the entire product lifecycle, from initial concept to market delivery, demanding new approaches from product teams.</p>
+          <span class="text-xs text-slate-400 dark:text-slate-500">The Ken</span>
+        </div>
+        
+        <div class="pb-4 border-b border-slate-100 dark:border-slate-800">
+          <h3 class="font-semibold text-slate-900 dark:text-white mb-1.5 leading-snug hover:text-amber-600 dark:hover:text-amber-400 transition-colors">
+            
+            <a href="https://news.google.com/rss/articles/CBMi0wFBVV95cUxOTUUxMFJmdmlhU1BqdTRPSURhQ1h4Mi1YdjZFMUltb0V6dnlKSjBuMlVBTUJPTzYzby1LQ2xXWG9maWdGaUtPem1SMnlOelpfVWtWUFkxWXdvSi1wV2lpRU5nbUk5SW5LT0ZqX0Z6SmR0RTNNSElZWjR4OTRPZTZBMm5CclJfMlF4V0dJdklGUzFzSFVyNF9RQ2RfUW9jczRsRWJYV3FlcTZpNmJ5SVlXLWtyeTFEb1RuNjhnM19FR2sySVB4SDBqWTFackJKQzlfZ29J?oc=5" target="_blank" rel="noopener noreferrer">Epiq’s Senior Director of Product Management: AI Has Shifted Legal Tech Buyers Expectations</a>
+            
+          </h3>
+          <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed mb-1.5">Law.com reports on how AI&#39;s integration into legal tech has significantly elevated buyer expectations, pushing product managers to deliver more sophisticated and intelligent solutions.</p>
+          <span class="text-xs text-slate-400 dark:text-slate-500">Law.com</span>
+        </div>
+        
+        <div class="pb-4 border-b border-slate-100 dark:border-slate-800">
+          <h3 class="font-semibold text-slate-900 dark:text-white mb-1.5 leading-snug hover:text-amber-600 dark:hover:text-amber-400 transition-colors">
+            
+            <a href="https://news.google.com/rss/articles/CBMi2AFBVV95cUxOQks0V0JQdzhpX2JZSllGN1h2eEt5MDdVOFFrNW9jWUlwSDZLTFJFeThvME9nR2N1ZUlYZlhwMFBmZ0tRTXRvNXplZ1U2U1BuYmt1QkIxdktPNzBPeWdVTG4zM1ppUS1WRHgzc2ZGSUNLeHNMT3JFT2wtaHFSVWpUQnVFV3hXSW5fYUZlNmZzUUI3blplN3RnMVlKV25ZeTUxYnFYYm02SC1kS0t4NWpyUWFITGU2UTJka08weGhQOWN0UmVnVU9PYklsSDhjR1B1ZjBCdThLVkI?oc=5" target="_blank" rel="noopener noreferrer">Udacity, Part of Accenture, Launches Accredited MBA to Train the Next Generation of AI Product Leaders</a>
+            
+          </h3>
+          <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed mb-1.5">Accenture announces a new MBA program designed to equip future product leaders with the specialized skills needed to navigate and innovate within the rapidly evolving AI landscape.</p>
+          <span class="text-xs text-slate-400 dark:text-slate-500">Accenture</span>
+        </div>
+        
+        <div class="pb-4 ">
+          <h3 class="font-semibold text-slate-900 dark:text-white mb-1.5 leading-snug hover:text-amber-600 dark:hover:text-amber-400 transition-colors">
+            
+            <a href="https://news.google.com/rss/articles/CBMiwwFBVV95cUxPcThtc2FUNy1HSlh6cWpwSjhiWEdHQUVJVXp4NnUyMDFTQnBSdndBYTJSRExjSnoxQUNSVUVIdHBicF9jeDNZelEyLUFmNjB5OWdnOTI3dFhjdkZEc2tKTktNaXZHbzlZeWl6cjBEOHUyR2RrNDJFMVFIVWRZZ0d2NWwwcTNTYThDeU82SEFjem11YkFqNHFxLURSQXhucTRSaHY3bTZjMW5DcHBxV1dGRGFBaWxreGpSTkN5T3hpNFVMRVE?oc=5" target="_blank" rel="noopener noreferrer">How cutting out product management enabled Kilo to compete in the hyper-fast AI coding market</a>
+            
+          </h3>
+          <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed mb-1.5">Fortune details how Kilo achieved competitive advantage in the fast-paced AI coding market by streamlining its development process, notably by re-evaluating the traditional role of product management.</p>
+          <span class="text-xs text-slate-400 dark:text-slate-500">Fortune</span>
+        </div>
+        
+      </div>
+      
+
+      
+      
+      
+      <div class="p-4 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-xl">
+        <p class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-2">📚 Deep Read</p>
+        <a href="https://news.google.com/rss/articles/CBMimAFBVV95cUxNb2haa3NrZmtaY05mM1ZvV25zTENjRlVzcVp2ZTZUc0tUWllQdjRvNU9DS0M3cUw2REozVklZbE1ZSXI0cGxtLUhoT0VJOGw4UDVzN0dxR2VJSzBibVFLT0F0dU1sa2JLM0J0Vl9IYlpQTVBHYjFDWnpNbVE2clNTbzJzV0RUTV9ZT1lTTTEzekhmWU5POUg5aw?oc=5" target="_blank" rel="noopener noreferrer"
+           class="font-medium text-sm text-amber-600 dark:text-amber-400 hover:underline">
+          Five strategies for deeper AI adoption at work
+        </a>
+        
+        <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">This Google blog post offers practical, actionable strategies for integrating AI more effectively into daily workflows, which is crucial for any product manager navigating the AI transition.</p>
+        
+      </div>
+      
+    </div>
+  </div>
+  
+
+  
+  
+  
+  
+
+  <div class="section-card mb-8 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-2xl overflow-hidden shadow-sm">
+
+    
+    <div class="border-l-4 border-orange pl-5 pr-6 py-5 flex items-center gap-3 border-b border-slate-100 dark:border-slate-800">
+      <span class="text-2xl" role="img">⚡</span>
+      <h2 class="font-bold text-lg text-slate-900 dark:text-white">AI Tools &amp; Launches</h2>
+    </div>
+
+    <div class="p-6">
+      
+      
+      <p class="text-slate-700 dark:text-slate-300 text-sm leading-relaxed mb-5">
+        This week showcased a diverse array of AI tools and hardware innovations, emphasizing real-time processing and enhanced developer capabilities. From CERN&#39;s deployment of tiny AI models for high-speed data filtering to new platforms enabling AI coding agents to &#34;see&#34; and interact with frontends, the focus is on making AI more efficient, accessible, and integrated into complex systems. The continued development of specialized hardware, like AMD&#39;s high-cache processors, also signals a push for greater computational power to support these advanced AI applications.
+      </p>
+      
+
+      
+      
+      
+      <div class="space-y-4 mb-5">
+        
+        <div class="pb-4 border-b border-slate-100 dark:border-slate-800">
+          <h3 class="font-semibold text-slate-900 dark:text-white mb-1.5 leading-snug hover:text-amber-600 dark:hover:text-amber-400 transition-colors">
+            
+            <a href="https://theopenreader.org/Journalism:CERN_Uses_Tiny_AI_Models_Burned_into_Silicon_for_Real-Time_LHC_Data_Filtering" target="_blank" rel="noopener noreferrer">CERN uses tiny AI models burned into silicon for real-time LHC data filtering</a>
+            
+          </h3>
+          <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed mb-1.5">Hacker News reports on CERN&#39;s innovative use of specialized AI models embedded in silicon to process vast amounts of LHC data with unprecedented speed and efficiency.</p>
+          <span class="text-xs text-slate-400 dark:text-slate-500">Hacker News</span>
+        </div>
+        
+        <div class="pb-4 border-b border-slate-100 dark:border-slate-800">
+          <h3 class="font-semibold text-slate-900 dark:text-white mb-1.5 leading-snug hover:text-amber-600 dark:hover:text-amber-400 transition-colors">
+            
+            <a href="https://www.producthunt.com/products/domscribe" target="_blank" rel="noopener noreferrer">Domscribe</a>
+            
+          </h3>
+          <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed mb-1.5">Product Hunt introduces Domscribe, a tool that provides AI coding agents with visual access to running frontends, enabling more intuitive and effective web development.</p>
+          <span class="text-xs text-slate-400 dark:text-slate-500">Product Hunt — The best new products, every day</span>
+        </div>
+        
+        <div class="pb-4 border-b border-slate-100 dark:border-slate-800">
+          <h3 class="font-semibold text-slate-900 dark:text-white mb-1.5 leading-snug hover:text-amber-600 dark:hover:text-amber-400 transition-colors">
+            
+            <a href="https://www.producthunt.com/products/glance-give-claude-code-a-real-browser" target="_blank" rel="noopener noreferrer">Glance</a>
+            
+          </h3>
+          <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed mb-1.5">Product Hunt features Glance, a real browser environment for Claude Code, allowing developers to test, screenshot, and automate interactions directly within a browser.</p>
+          <span class="text-xs text-slate-400 dark:text-slate-500">Product Hunt — The best new products, every day</span>
+        </div>
+        
+        <div class="pb-4 ">
+          <h3 class="font-semibold text-slate-900 dark:text-white mb-1.5 leading-snug hover:text-amber-600 dark:hover:text-amber-400 transition-colors">
+            
+            <a href="https://arstechnica.com/gadgets/2026/03/amds-ryzen-9-9950x3d2-dual-edition-crams-208mb-of-cache-into-a-single-chip/" target="_blank" rel="noopener noreferrer">AMD&#39;s Ryzen 9 9950X3D2 Dual Edition crams 208MB of cache into a single chip</a>
+            
+          </h3>
+          <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed mb-1.5">Ars Technica details AMD&#39;s latest processor, boasting an impressive 208MB of cache, signaling advancements in hardware design crucial for demanding AI and computational tasks.</p>
+          <span class="text-xs text-slate-400 dark:text-slate-500">Hacker News</span>
+        </div>
+        
+      </div>
+      
+
+      
+      
+      
+      <div class="p-4 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-xl">
+        <p class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-2">📚 Deep Read</p>
+        <a href="https://jai.scs.stanford.edu/" target="_blank" rel="noopener noreferrer"
+           class="font-medium text-sm text-amber-600 dark:text-amber-400 hover:underline">
+          Go hard on agents, not on your filesystem
+        </a>
+        
+        <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">This Stanford article offers a compelling perspective on optimizing AI agent development, advocating for a focus on agent intelligence over complex filesystem interactions, which is key for efficient AI tool design.</p>
+        
+      </div>
+      
+    </div>
+  </div>
+  
+
+  
+  
+  
+  
+
+  <div class="section-card mb-8 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-2xl overflow-hidden shadow-sm">
+
+    
+    <div class="border-l-4 border-green pl-5 pr-6 py-5 flex items-center gap-3 border-b border-slate-100 dark:border-slate-800">
+      <span class="text-2xl" role="img">🇮🇳</span>
+      <h2 class="font-bold text-lg text-slate-900 dark:text-white">India — Broad Landscape</h2>
+    </div>
+
+    <div class="p-6">
+      
+      
+      <p class="text-slate-700 dark:text-slate-300 text-sm leading-relaxed mb-5">
+        India&#39;s economic and startup landscape demonstrated significant dynamism this week, marked by robust funding activities and several companies filing for IPOs, signaling a maturing market. Despite global geopolitical tensions, Indian startups collectively raised substantial capital. Regulatory actions, such as the RBI&#39;s penalty on Pine Labs, underscored the government&#39;s vigilance in maintaining compliance. Furthermore, government discussions on international conflicts and domestic policy adjustments, like excise duty cuts, reflected a proactive approach to national and economic stability.
+      </p>
+      
+
+      
+      
+      
+      <div class="space-y-4 mb-5">
+        
+        <div class="pb-4 border-b border-slate-100 dark:border-slate-800">
+          <h3 class="font-semibold text-slate-900 dark:text-white mb-1.5 leading-snug hover:text-amber-600 dark:hover:text-amber-400 transition-colors">
+            
+            <a href="https://inc42.com/buzz/from-euler-motors-to-rocketlane-indian-startups-raised-343-mn-this-week/" target="_blank" rel="noopener noreferrer">From Euler Motors To Rocketlane — Indian Startups Raised $343 Mn This Week</a>
+            
+          </h3>
+          <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed mb-1.5">Inc42 Media reports a strong week for Indian startups, collectively securing $343 million in funding, highlighting sustained investor confidence in the ecosystem&#39;s growth potential.</p>
+          <span class="text-xs text-slate-400 dark:text-slate-500">Inc42 Media</span>
+        </div>
+        
+        <div class="pb-4 border-b border-slate-100 dark:border-slate-800">
+          <h3 class="font-semibold text-slate-900 dark:text-white mb-1.5 leading-snug hover:text-amber-600 dark:hover:text-amber-400 transition-colors">
+            
+            <a href="https://inc42.com/buzz/accel-backed-rentomojo-files-drhp-for-ipo/" target="_blank" rel="noopener noreferrer">Accel-Backed Rentomojo Files DRHP For IPO</a>
+            
+          </h3>
+          <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed mb-1.5">Inc42 Media announces that furniture and appliance rental startup Rentomojo has filed its Draft Red Herring Prospectus (DRHP) with SEBI, moving closer to its initial public offering.</p>
+          <span class="text-xs text-slate-400 dark:text-slate-500">Inc42 Media</span>
+        </div>
+        
+        <div class="pb-4 border-b border-slate-100 dark:border-slate-800">
+          <h3 class="font-semibold text-slate-900 dark:text-white mb-1.5 leading-snug hover:text-amber-600 dark:hover:text-amber-400 transition-colors">
+            
+            <a href="https://inc42.com/buzz/rbi-slaps-penalty-on-pine-labs-for-violating-ppi-guidelines/" target="_blank" rel="noopener noreferrer">RBI Slaps Penalty On Pine Labs For Violating PPI Guidelines</a>
+            
+          </h3>
+          <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed mb-1.5">Inc42 Media details the Reserve Bank of India&#39;s imposition of a penalty on fintech major Pine Labs for non-compliance with Prepaid Payment Instrument (PPI) guidelines, emphasizing regulatory oversight.</p>
+          <span class="text-xs text-slate-400 dark:text-slate-500">Inc42 Media</span>
+        </div>
+        
+        <div class="pb-4 ">
+          <h3 class="font-semibold text-slate-900 dark:text-white mb-1.5 leading-snug hover:text-amber-600 dark:hover:text-amber-400 transition-colors">
+            
+            <a href="https://inc42.com/buzz/info-edge-commits-%e2%82%b9250-cr-to-a88-fund-i-to-back-early-stage-deeptech-startups/" target="_blank" rel="noopener noreferrer">Info Edge Commits ₹250 Cr To A88 Fund I To Back Early-Stage Deeptech Startups</a>
+            
+          </h3>
+          <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed mb-1.5">Inc42 Media reports that Naukri parent Info Edge has pledged ₹250 crore to A88 Fund I, demonstrating a strategic investment in nurturing early-stage deeptech startups in India.</p>
+          <span class="text-xs text-slate-400 dark:text-slate-500">Inc42 Media</span>
+        </div>
+        
+      </div>
+      
+
+      
+      
+      
+      <div class="p-4 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-xl">
+        <p class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-2">📚 Deep Read</p>
+        <a href="https://news.google.com/rss/articles/CBMi1wFBVV95cUxNUDhfLS1CTUpYbWZSQ1haV0Q5WUJfMGJVLWJvaG8tTE1BLWtwVHVIM2RQRXA0eENqcHE5Z0FLblZmNTREUUdyOUwtcnJuSVc3TnJYMGxfVkNTcERrMTRYRXEyZk9Wa25FaWJZU0h5dVFucFQyUUZCOEFkclpfOV9wZmtydXdFVWl3NVl6UXR6YXhIZUViU0RlaXc4Qjh0SUhpUHhGVm9wVU9OS3daVjRTZXFEMFlQZXJEYUI3akhBT1ROa3o1ZWkyQ3RoaVNpOFBqai01RkpOZw?oc=5" target="_blank" rel="noopener noreferrer"
+           class="font-medium text-sm text-amber-600 dark:text-amber-400 hover:underline">
+          PM Modi highlights India’s human-centric AI strategy, shares Dharmendra Pradhan’s article on global innovation vision
+        </a>
+        
+        <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">This article provides insight into India&#39;s strategic vision for AI, emphasizing a human-centric approach that aligns with global innovation, offering a high-level perspective relevant to a product manager.</p>
+        
+      </div>
+      
+    </div>
+  </div>
+  
+
+  
+  
+  
+  
+
+  <div class="section-card mb-8 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-2xl overflow-hidden shadow-sm">
+
+    
+    <div class="border-l-4 border-pink pl-5 pr-6 py-5 flex items-center gap-3 border-b border-slate-100 dark:border-slate-800">
+      <span class="text-2xl" role="img">📱</span>
+      <h2 class="font-bold text-lg text-slate-900 dark:text-white">Content Creator Trends</h2>
+    </div>
+
+    <div class="p-6">
+      
+      
+      <p class="text-slate-700 dark:text-slate-300 text-sm leading-relaxed mb-5">
+        This week brought encouraging news for content creators, particularly with Instagram&#39;s algorithm reportedly shifting to boost original content, signaling a potential move away from recycled trends. Discussions around Gen Z&#39;s social media habits and effective ad creative strategies underscored the evolving landscape of digital engagement. The ongoing focus on viral content data and trending hashtags highlights the continuous need for creators and brands to adapt to dynamic platform algorithms and audience preferences to maintain relevance and maximize reach.
+      </p>
+      
+
+      
+      
+      
+      <div class="space-y-4 mb-5">
+        
+        <div class="pb-4 border-b border-slate-100 dark:border-slate-800">
+          <h3 class="font-semibold text-slate-900 dark:text-white mb-1.5 leading-snug hover:text-amber-600 dark:hover:text-amber-400 transition-colors">
+            
+            <a href="https://news.google.com/rss/articles/CBMilgFBVV95cUxQRjlxUHNNOEtVbEpzV2VFeDR5ZTRmLWdoN1VGYWVBbFAzUjFMMkRyT01QUTBlWmxva00wRGR1YmtnY2FfOWNfX3FSeWJIYUcwOFFuU2R4c2VpVVVXd19TeG1GMlJPZFNkMXpiY3paaG82RmxVWklQRENIR3lROE5WVFQxN01VWVk3a05WdXVNUDh1N2x2Umc?oc=5" target="_blank" rel="noopener noreferrer">Instagram&#39;s Latest Algorithm: A Boost for Original Content Creators! - OpenTools</a>
+            
+          </h3>
+          <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed mb-1.5">OpenTools reports that Instagram&#39;s updated algorithm is now prioritizing original content, offering a significant advantage and increased visibility for creators who produce unique material.</p>
+          <span class="text-xs text-slate-400 dark:text-slate-500">OpenTools</span>
+        </div>
+        
+        <div class="pb-4 border-b border-slate-100 dark:border-slate-800">
+          <h3 class="font-semibold text-slate-900 dark:text-white mb-1.5 leading-snug hover:text-amber-600 dark:hover:text-amber-400 transition-colors">
+            
+            <a href="https://www.socialmediaexaminer.com/ad-creative-strategy-the-easy-way-to-improve-facebook-and-instagram-roas/" target="_blank" rel="noopener noreferrer">Ad Creative Strategy: The Easy Way to Improve Facebook and Instagram ROAS</a>
+            
+          </h3>
+          <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed mb-1.5">Social Media Examiner provides actionable strategies for optimizing ad creatives on Facebook and Instagram, aiming to significantly enhance Return on Ad Spend (ROAS) for businesses and creators.</p>
+          <span class="text-xs text-slate-400 dark:text-slate-500">Social Media Examiner</span>
+        </div>
+        
+        <div class="pb-4 border-b border-slate-100 dark:border-slate-800">
+          <h3 class="font-semibold text-slate-900 dark:text-white mb-1.5 leading-snug hover:text-amber-600 dark:hover:text-amber-400 transition-colors">
+            
+            <a href="https://news.google.com/rss/articles/CBMiY0FVX3lxTFBkeE9EMjhHaGFqTXNBRGUwcDdsZU5TUjBFQWptelVsbjQxX0t3Mk5JT0p5ekJNVUlNU3YxYVRtTHFISmEyUnhTcmJ1dHJVQU9memFuSDVIZFdUbFdKRU1oNUtSb9IBaEFVX3lxTE1VMHV2TEZTeEtmaUpNMlZIMGVSU2lVZFRqTV9BRlZxNDFXY3ViMDdyVEtEOVhKVW5rSlNHQS1Mb0V6NVlHLXNTeU5vY0hpWFppWmlRd3ZtZVBQMFM1YlVwVmUtSzcyMHJz?oc=5" target="_blank" rel="noopener noreferrer">How Gen Z uses social media and what that means for brands - Sprout Social</a>
+            
+          </h3>
+          <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed mb-1.5">Sprout Social analyzes the distinct social media consumption patterns of Gen Z, offering insights into how brands can effectively tailor their strategies to engage this crucial demographic.</p>
+          <span class="text-xs text-slate-400 dark:text-slate-500">Sprout Social</span>
+        </div>
+        
+        <div class="pb-4 ">
+          <h3 class="font-semibold text-slate-900 dark:text-white mb-1.5 leading-snug hover:text-amber-600 dark:hover:text-amber-400 transition-colors">
+            
+            <a href="https://news.google.com/rss/articles/CBMic0FVX3lxTE5DMGw3WXVvUVVmV3VZSllIdGl5dzU5dk8yVjI0eVdGSldMeXktSHRacV92dXZieE9YVXI2clg4LVdENnhDYk9CUEpMb2kxUWZkWTBtMU9ORW1NNFJEcHhDZ0JnLUpQcm5PQ3RNazNGVjVYNFXSAXhBVV95cUxPNDZKZVFMYkVRM1lhTGJ5ZlhDbGVXSXViZXk2ZkV1MHhvdjhGN3hDVU9US0Nka0k2LTJjMThfRUJPeGstcy0ta1RYVW14UkhyZ1BvZkxYNnQxVHBybE5QU0dDaTV0RlpKRnFHZVRJMVpTSDgtNk8xeEg?oc=5" target="_blank" rel="noopener noreferrer">Content Creation Tools - Trend Hunter</a>
+            
+          </h3>
+          <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed mb-1.5">Trend Hunter explores a range of innovative tools designed to streamline and enhance the content creation process, catering to the evolving needs of digital creators.</p>
+          <span class="text-xs text-slate-400 dark:text-slate-500">Trend Hunter</span>
+        </div>
+        
+      </div>
+      
+
+      
+      
+      
+      <div class="p-4 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-xl">
+        <p class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-2">📚 Deep Read</p>
+        <a href="https://news.google.com/rss/articles/CBMiVkFVX3lxTE5ZV1Rycnh4NVl4cjQ0VDFGeU9lbFhqalpYOTNFQTctQkE0RkVqM25QbW56bTlrNHJ6T2J4YngtazZxVzdJaDFEUm11bEpXVUNOb2lkYTB3?oc=5" target="_blank" rel="noopener noreferrer"
+           class="font-medium text-sm text-amber-600 dark:text-amber-400 hover:underline">
+          Instagram Reels for business in 2026: Best practices + examples
+        </a>
+        
+        <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">This Hootsuite article offers a comprehensive guide to leveraging Instagram Reels for business, providing practical best practices and examples that are highly valuable for content creators and marketers.</p>
+        
+      </div>
+      
+    </div>
+  </div>
+  
+
+
+
+
+<div class="mt-4 mb-10 p-6 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-2xl">
+  <p class="text-xs font-semibold tracking-widest uppercase text-amber-400 dark:text-amber-600 mb-3">Pattern of the Week</p>
+  <p class="text-base leading-relaxed">A clear pattern emerging this week is the dual focus on AI&#39;s accelerating impact and the urgent need for its responsible governance. While new AI tools and hardware push the boundaries of what&#39;s possible in areas like real-time data processing and product development, there&#39;s a growing chorus of voices, from policymakers to legal scholars, emphasizing the critical importance of establishing robust ethical and legal frameworks to manage AI&#39;s societal implications. This tension between rapid innovation and the demand for accountability is shaping both technological advancements and regulatory landscapes globally, including India&#39;s human-centric AI strategy.</p>
+</div>
+
+
+
+  </main>
+
+  <!-- ARCHIVE NAVIGATION -->
+  
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 pb-8">
+    <div class="border-t border-slate-200 dark:border-slate-700 pt-8">
+      <h3 class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-3">Recent Digests</h3>
+      <div class="flex flex-wrap gap-2">
+        
+        <a href="archive/2026-03-27.html" class="text-xs px-3 py-1.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-amber-100 dark:hover:bg-amber-900/30 hover:text-amber-700 dark:hover:text-amber-400 transition-colors">
+          Mar 27
+        </a>
+        
+      </div>
+    </div>
+  </div>
+  
+
+  <!-- FOOTER -->
+  <footer class="border-t border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 py-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500 dark:text-slate-500">
+      <span>Generated at 03:22 PM IST by PDD Agent</span>
+      <a href="https://github.com" class="hover:text-amber-500 transition-colors">View on GitHub →</a>
+    </div>
+  </footer>
+
+  <script>
+    // ─── Dark mode persistence ───────────────────
+    function toggleDark() {
+      const html = document.documentElement;
+      html.classList.toggle('dark');
+      localStorage.setItem('pdd-theme', html.classList.contains('dark') ? 'dark' : 'light');
+    }
+
+    // Apply saved preference on load
+    (function() {
+      const saved = localStorage.getItem('pdd-theme');
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      if (saved === 'dark' || (!saved && prefersDark)) {
+        document.documentElement.classList.add('dark');
+      }
+    })();
+
+    // ─── Collapsible sources ─────────────────────
+    function toggleSources() {
+      const el = document.getElementById('sources-list');
+      if (el) el.classList.toggle('hidden');
+    }
+  </script>
 </body>
 </html>
