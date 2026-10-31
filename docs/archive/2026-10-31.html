@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Weekly Roundup — October 31, 2026 — PDD</title>
+
+  <!-- Tailwind CSS via CDN — no build step needed -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Inter"', 'system-ui', 'sans-serif'],
+            serif: ['"Playfair Display"', 'Georgia', 'serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          },
+          colors: {
+            amber: { 400: '#fbbf24', 500: '#f59e0b', 600: '#d97706' },
+          },
+          animation: {
+            'fade-up': 'fadeUp 0.5s ease forwards',
+          },
+          keyframes: {
+            fadeUp: {
+              '0%': { opacity: '0', transform: 'translateY(16px)' },
+              '100%': { opacity: '1', transform: 'translateY(0)' },
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+  <!-- Custom styles -->
+  <link rel="stylesheet" href="style.css" />
+
+  <style>
+    /* Staggered fade-in for sections */
+    .section-card { opacity: 0; animation: fadeUp 0.5s ease forwards; }
+    .section-card:nth-child(1) { animation-delay: 0.1s; }
+    .section-card:nth-child(2) { animation-delay: 0.2s; }
+    .section-card:nth-child(3) { animation-delay: 0.3s; }
+    .section-card:nth-child(4) { animation-delay: 0.4s; }
+    .section-card:nth-child(5) { animation-delay: 0.5s; }
+
+    /* Section color pills */
+    .pill-purple  { background: #ede9fe; color: #7c3aed; }
+    .pill-teal    { background: #ccfbf1; color: #0f766e; }
+    .pill-orange  { background: #ffedd5; color: #c2410c; }
+    .pill-green   { background: #dcfce7; color: #15803d; }
+    .pill-pink    { background: #fce7f3; color: #be185d; }
+
+    /* Dark mode pills */
+    .dark .pill-purple  { background: #3b0764; color: #c4b5fd; }
+    .dark .pill-teal    { background: #042f2e; color: #5eead4; }
+    .dark .pill-orange  { background: #431407; color: #fed7aa; }
+    .dark .pill-green   { background: #052e16; color: #86efac; }
+    .dark .pill-pink    { background: #500724; color: #f9a8d4; }
+
+    /* Section header border colors */
+    .border-purple { border-color: #7c3aed; }
+    .border-teal   { border-color: #0f766e; }
+    .border-orange { border-color: #c2410c; }
+    .border-green  { border-color: #15803d; }
+    .border-pink   { border-color: #be185d; }
+
+    /* Smooth scrollbar */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #94a3b8; border-radius: 3px; }
+
+    /* Story card hover */
+    .story-card { transition: transform 0.15s ease, box-shadow 0.15s ease; }
+    .story-card:hover { transform: translateY(-2px); }
+  </style>
+</head>
+
+<body class="bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-200 transition-colors duration-300 min-h-screen font-sans">
+
+  <!-- TOP BAR -->
+  <div class="sticky top-0 z-50 bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm border-b border-slate-200 dark:border-slate-700">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <span class="text-amber-500 text-lg">📰</span>
+        <span class="font-semibold text-sm text-slate-600 dark:text-slate-400 tracking-wide uppercase">Personal Daily Digest</span>
+      </div>
+      <button
+        id="darkModeToggle"
+        onclick="toggleDark()"
+        class="p-2 rounded-full text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+        title="Toggle dark mode"
+        aria-label="Toggle dark mode"
+      >
+        <span id="darkIcon" class="hidden dark:inline">☀️</span>
+        <span id="lightIcon" class="dark:hidden">🌙</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <main class="max-w-4xl mx-auto px-4 sm:px-6 py-8">
+    
+
+
+<header class="mb-10">
+  <div class="flex items-center gap-2 mb-3">
+    <span class="text-xs font-semibold tracking-widest uppercase text-amber-500">Saturday Edition — Weekly Roundup</span>
+  </div>
+  <h1 class="font-serif text-4xl sm:text-5xl font-extrabold text-slate-900 dark:text-white leading-tight mb-2">
+    The Week in Review
+  </h1>
+  <p class="text-lg text-slate-500 dark:text-slate-400">October 31, 2026</p>
+</header>
+
+
+
+<section class="mb-10">
+  <div class="p-6 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-700/50 rounded-2xl">
+    <p class="text-xs font-semibold tracking-widest uppercase text-amber-600 dark:text-amber-400 mb-3">This Week at a Glance</p>
+    <p class="text-slate-700 dark:text-slate-300 text-base leading-relaxed">This week saw significant movement in AI policy, with India proposing a new privacy framework for AI model training and Apple Intelligence making its debut in China, highlighting the global regulatory landscape. On the product front, governments are investing heavily in sovereign AI capabilities, while companies grapple with the economic realities and security risks of advanced AI. The AI tools landscape continues to evolve with new agentic applications, and content creators are adapting to shifting platform algorithms and leveraging AI for workflow enhancements.</p>
+  </div>
+</section>
+
+
+
+
+<section class="mb-12">
+  <div class="flex items-center gap-3 mb-5">
+    <div class="h-1 w-8 bg-amber-500 rounded-full"></div>
+    <h2 class="text-xs font-semibold tracking-widest uppercase text-amber-600 dark:text-amber-400">Stories That Defined the Week</h2>
+  </div>
+
+  <div class="space-y-4">
+    
+    <div class="group relative bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-2xl p-6 story-card shadow-sm hover:shadow-md hover:border-amber-300 dark:hover:border-amber-600">
+      <div class="absolute -top-3 -left-3 w-8 h-8 rounded-full bg-amber-500 text-white text-sm font-bold flex items-center justify-center shadow-sm">
+        1
+      </div>
+
+      
+      <div class="mb-3">
+        <span class="pill-green text-xs font-semibold px-2.5 py-1 rounded-full">
+          India — Broad Landscape
+        </span>
+      </div>
+
+      <h3 class="font-semibold text-lg text-slate-900 dark:text-white mb-2 leading-snug">
+        India Proposes New Privacy Framework to Unlock Data for AI Model Training
+      </h3>
+      <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed mb-3">
+        India&#39;s Ministry of Electronics and Information Technology (MeitY) has floated a new consent-based framework designed to facilitate data sharing for training AI models while upholding privacy. This strategic move aims to balance the need for robust data to fuel domestic AI innovation with stringent data protection principles. The framework could significantly influence the development and deployment of AI products within India, setting a precedent for responsible AI data governance.
+      </p>
+      
+      <a href="https://inc42.com/buzz/meity-floats-new-privacy-led-framework-to-unlock-data-for-training-ai-models/" target="_blank" rel="noopener noreferrer"
+         class="inline-flex items-center gap-1 text-xs font-medium text-amber-600 dark:text-amber-400 hover:text-amber-700 dark:hover:text-amber-300 transition-colors">
+        Read full story →
+      </a>
+      
+    </div>
+    
+    <div class="group relative bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-2xl p-6 story-card shadow-sm hover:shadow-md hover:border-amber-300 dark:hover:border-amber-600">
+      <div class="absolute -top-3 -left-3 w-8 h-8 rounded-full bg-amber-500 text-white text-sm font-bold flex items-center justify-center shadow-sm">
+        2
+      </div>
+
+      
+      <div class="mb-3">
+        <span class="pill-purple text-xs font-semibold px-2.5 py-1 rounded-full">
+          AI Policy &amp; Responsible Tech
+        </span>
+      </div>
+
+      <h3 class="font-semibold text-lg text-slate-900 dark:text-white mb-2 leading-snug">
+        Apple Intelligence Set to Launch in China with iOS 27.3
+      </h3>
+      <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed mb-3">
+        Apple announced that its Apple Intelligence features will finally be available in China with the release of iOS 27.3, initially through a beta program. This marks a significant market entry for Apple&#39;s AI capabilities into one of the world&#39;s largest and most regulated tech markets. The move highlights the complex geopolitical and regulatory challenges companies face when deploying advanced AI globally, and its reception will be closely watched.
+      </p>
+      
+      <a href="https://www.theverge.com/tech/1023974/apple-intelligence-china-ios-27-3" target="_blank" rel="noopener noreferrer"
+         class="inline-flex items-center gap-1 text-xs font-medium text-amber-600 dark:text-amber-400 hover:text-amber-700 dark:hover:text-amber-300 transition-colors">
+        Read full story →
+      </a>
+      
+    </div>
+    
+    <div class="group relative bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-2xl p-6 story-card shadow-sm hover:shadow-md hover:border-amber-300 dark:hover:border-amber-600">
+      <div class="absolute -top-3 -left-3 w-8 h-8 rounded-full bg-amber-500 text-white text-sm font-bold flex items-center justify-center shadow-sm">
+        3
+      </div>
+
+      
+      <div class="mb-3">
+        <span class="pill-teal text-xs font-semibold px-2.5 py-1 rounded-full">
+          Product Management in the AI Era
+        </span>
+      </div>
+
+      <h3 class="font-semibold text-lg text-slate-900 dark:text-white mb-2 leading-snug">
+        Canada Invests in Cohere to Scale Secure, Sovereign AI Capabilities
+      </h3>
+      <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed mb-3">
+        Prime Minister Carney announced a landmark investment in Cohere, aiming to scale secure and sovereign AI capabilities within Canada. This initiative underscores a growing global trend where governments are strategically backing national AI champions to ensure technological independence and data security. Such investments directly influence the product development trajectories of AI firms, emphasizing national interests alongside commercial innovation.
+      </p>
+      
+      <a href="https://news.google.com/rss/articles/CBMivAFBVV95cUxNWXpmeFExb1d0MDdYTWRMTU1oQ3lwTkZSQjRZVTVzMFBJQWsycGg1XzlMY003YnRWam4zd3ZSR2t5RGlwMk1UZzIwVDYxaWc3ZzVvcEN0aTR3LWhFQWhNMy1zOTBEVWQ4clI3OHJQbGlrZ2k5UDc0TjNNak9PVHlNQXhZcWl0anptZTFaMlpkS2FHbmd2bUtFWS1BeFRYWHRKWElXOUhUTXp2SFRfYTZoMUdOaXVLWHhybjB6Mw?oc=5" target="_blank" rel="noopener noreferrer"
+         class="inline-flex items-center gap-1 text-xs font-medium text-amber-600 dark:text-amber-400 hover:text-amber-700 dark:hover:text-amber-300 transition-colors">
+        Read full story →
+      </a>
+      
+    </div>
+    
+    <div class="group relative bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-2xl p-6 story-card shadow-sm hover:shadow-md hover:border-amber-300 dark:hover:border-amber-600">
+      <div class="absolute -top-3 -left-3 w-8 h-8 rounded-full bg-amber-500 text-white text-sm font-bold flex items-center justify-center shadow-sm">
+        4
+      </div>
+
+      
+      <div class="mb-3">
+        <span class="pill-purple text-xs font-semibold px-2.5 py-1 rounded-full">
+          AI Policy &amp; Responsible Tech
+        </span>
+      </div>
+
+      <h3 class="font-semibold text-lg text-slate-900 dark:text-white mb-2 leading-snug">
+        Google Research Introduces &#39;Sleep Framework&#39; for LLM Knowledge Retention
+      </h3>
+      <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed mb-3">
+        Google Research unveiled a new &#39;Sleep framework&#39; designed to help Large Language Models (LLMs) retain knowledge more effectively during continual learning. This breakthrough addresses a critical challenge in AI development: preventing catastrophic forgetting as models are updated with new information. The ability to build more stable and reliable LLMs has profound implications for the trustworthiness and long-term utility of AI applications, impacting future governance and ethical considerations.
+      </p>
+      
+      <a href="https://research.google/blog/the-sleep-framework-a-new-way-for-llms-to-retain-knowledge-in-continual-learning/" target="_blank" rel="noopener noreferrer"
+         class="inline-flex items-center gap-1 text-xs font-medium text-amber-600 dark:text-amber-400 hover:text-amber-700 dark:hover:text-amber-300 transition-colors">
+        Read full story →
+      </a>
+      
+    </div>
+    
+    <div class="group relative bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-2xl p-6 story-card shadow-sm hover:shadow-md hover:border-amber-300 dark:hover:border-amber-600">
+      <div class="absolute -top-3 -left-3 w-8 h-8 rounded-full bg-amber-500 text-white text-sm font-bold flex items-center justify-center shadow-sm">
+        5
+      </div>
+
+      
+      <div class="mb-3">
+        <span class="pill-teal text-xs font-semibold px-2.5 py-1 rounded-full">
+          Product Management in the AI Era
+        </span>
+      </div>
+
+      <h3 class="font-semibold text-lg text-slate-900 dark:text-white mb-2 leading-snug">
+        Dell Links Supply Chain Security to Emerging Agentic AI Risks
+      </h3>
+      <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed mb-3">
+        Dell highlighted the critical importance of tying supply chain security directly to the evolving risks posed by agentic AI systems. As AI becomes more autonomous and integrated into various products, securing every component from its origin becomes paramount to prevent vulnerabilities. This focus signals a necessary shift for product managers towards comprehensive security strategies that encompass the entire lifecycle of AI-powered solutions, from hardware to software agents.
+      </p>
+      
+      <a href="https://news.google.com/rss/articles/CBMiyAFBVV95cUxNMXZJMTNaTkZkb1NFM2lfNncydlQyNlhLaFBydGMwc1BMek9GM1M0ajIwY0ZoY1A2M0plZ05yaklBb1BiZ3M3bmJJS3FDdnh5SDZYUml6TUVLWEQzSFlFV0theWdKUUgtUG5JclhBcS02RC1CTmRUWmNGUnJXWWpGdmwzNTdyVlNER21hQWl2N2EwTmQyT2JEY1Q3ME5SR2F6T1BzejNsb005MVFVRV9YbFFLOUZheHRQenpBb0RMMTdIWEpsQkRidw?oc=5" target="_blank" rel="noopener noreferrer"
+         class="inline-flex items-center gap-1 text-xs font-medium text-amber-600 dark:text-amber-400 hover:text-amber-700 dark:hover:text-amber-300 transition-colors">
+        Read full story →
+      </a>
+      
+    </div>
+    
+  </div>
+</section>
+
+
+
+<div class="flex items-center gap-4 mb-8">
+  <div class="flex-1 h-px bg-slate-200 dark:bg-slate-700"></div>
+  <span class="text-xs font-semibold tracking-widest uppercase text-slate-400 dark:text-slate-500">Section Roundups</span>
+  <div class="flex-1 h-px bg-slate-200 dark:bg-slate-700"></div>
+</div>
+
+
+
+
+  
+  
+  
+  
+
+  <div class="section-card mb-8 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-2xl overflow-hidden shadow-sm">
+
+    
+    <div class="border-l-4 border-purple pl-5 pr-6 py-5 flex items-center gap-3 border-b border-slate-100 dark:border-slate-800">
+      <span class="text-2xl" role="img">🔬</span>
+      <h2 class="font-bold text-lg text-slate-900 dark:text-white">AI Policy &amp; Responsible Tech</h2>
+    </div>
+
+    <div class="p-6">
+      
+      
+      <p class="text-slate-700 dark:text-slate-300 text-sm leading-relaxed mb-5">
+        This week underscored the growing global focus on AI governance and accountability. From India&#39;s proposed privacy framework for AI training data to the UK&#39;s fellowship in AI governance, nations and organizations are actively shaping the regulatory landscape. Discussions also centered on the ethical implications of AI, including accountability for errors and the societal impact of AI in areas like political campaigns and digital expression. The entry of Apple Intelligence into China further highlights the complex interplay of technology, market access, and national policy.
+      </p>
+      
+
+      
+      
+      
+      <div class="space-y-4 mb-5">
+        
+        <div class="pb-4 border-b border-slate-100 dark:border-slate-800">
+          <h3 class="font-semibold text-slate-900 dark:text-white mb-1.5 leading-snug hover:text-amber-600 dark:hover:text-amber-400 transition-colors">
+            
+            <a href="https://research.google/blog/the-sleep-framework-a-new-way-for-llms-to-retain-knowledge-in-continual-learning/" target="_blank" rel="noopener noreferrer">Sleep framework: A new way for LLMs to retain knowledge in continual learning</a>
+            
+          </h3>
+          <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed mb-1.5">Google Research introduced a novel framework to help LLMs retain knowledge more effectively in continual learning scenarios, addressing a core challenge for robust AI.</p>
+          <span class="text-xs text-slate-400 dark:text-slate-500">Hacker News</span>
+        </div>
+        
+        <div class="pb-4 border-b border-slate-100 dark:border-slate-800">
+          <h3 class="font-semibold text-slate-900 dark:text-white mb-1.5 leading-snug hover:text-amber-600 dark:hover:text-amber-400 transition-colors">
+            
+            <a href="https://www.theverge.com/tech/1023974/apple-intelligence-china-ios-27-3" target="_blank" rel="noopener noreferrer">Apple Intelligence is finally coming to China with iOS 27.3</a>
+            
+          </h3>
+          <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed mb-1.5">Apple announced the launch of its AI features in China with the upcoming iOS 27.3, navigating a complex regulatory environment.</p>
+          <span class="text-xs text-slate-400 dark:text-slate-500">AI | The Verge</span>
+        </div>
+        
+        <div class="pb-4 border-b border-slate-100 dark:border-slate-800">
+          <h3 class="font-semibold text-slate-900 dark:text-white mb-1.5 leading-snug hover:text-amber-600 dark:hover:text-amber-400 transition-colors">
+            
+            <a href="https://news.google.com/rss/articles/CBMimAFBVV95cUxPeWtTRkdfUnktanNKMG1RWEhPQ0ZPLWhLYmkyODA0eXJXR1BoSlFUaElIQ1pjVHgyT0pURm9GekZ3RTM2WW5sVjdPUzNIa1NKRGFlZEd4X1hGVlg0TlNRMGkxVW9maTIydzRwcU9DSU9SNWR4d2JKZmp2Q244b1VzWGhsUEdfWVZldU1xREZMTEptam1WWG9TMQ?oc=5" target="_blank" rel="noopener noreferrer">Day 28 | AI Governance: Who Is Accountable When Artificial Intelligence Goes Wrong?</a>
+            
+          </h3>
+          <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed mb-1.5">A critical discussion on establishing accountability mechanisms when AI systems produce undesirable or harmful outcomes.</p>
+          <span class="text-xs text-slate-400 dark:text-slate-500">Google News</span>
+        </div>
+        
+        <div class="pb-4 ">
+          <h3 class="font-semibold text-slate-900 dark:text-white mb-1.5 leading-snug hover:text-amber-600 dark:hover:text-amber-400 transition-colors">
+            
+            <a href="https://news.google.com/rss/articles/CBMipAFBVV95cUxObzdudXk2OHBnRGFPTzVPXzFRai1aNWgxMzQtZmdtT1VuZVMta3NqR2xaT0FmWEllbWRyNnJsRWNMby1iX2lqTjZac3Ftc044T1RpaFFudC1Ua1I5VWxzUzlkZzBKZ2ctblQ3THpGTjRFYV9tNGxuam0wOHg2dUtNUl9kazdmbzZxWUlsaDZHWE1MS0dab3dwQTlfWEJ0eWl1Qm1HZQ?oc=5" target="_blank" rel="noopener noreferrer">Law &amp; AI – Latham Watkins Report – FCA Issues Guidance for Firms on Their Use of AI</a>
+            
+          </h3>
+          <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed mb-1.5">The Financial Conduct Authority issued guidance for firms on the responsible and compliant use of AI, particularly in the financial sector.</p>
+          <span class="text-xs text-slate-400 dark:text-slate-500">Google News</span>
+        </div>
+        
+      </div>
+      
+
+      
+      
+      
+      <div class="p-4 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-xl">
+        <p class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-2">📚 Deep Read</p>
+        <a href="https://research.google/blog/the-sleep-framework-a-new-way-for-llms-to-retain-knowledge-in-continual-learning/" target="_blank" rel="noopener noreferrer"
+           class="font-medium text-sm text-amber-600 dark:text-amber-400 hover:underline">
+          Sleep framework: A new way for LLMs to retain knowledge in continual learning
+        </a>
+        
+        <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">This article offers a deep dive into a foundational technical challenge for LLMs, providing insight into how future AI systems might become more reliable and adaptable, which is crucial for long-term policy and trust.</p>
+        
+      </div>
+      
+    </div>
+  </div>
+  
+
+  
+  
+  
+  
+
+  <div class="section-card mb-8 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-2xl overflow-hidden shadow-sm">
+
+    
+    <div class="border-l-4 border-teal pl-5 pr-6 py-5 flex items-center gap-3 border-b border-slate-100 dark:border-slate-800">
+      <span class="text-2xl" role="img">📋</span>
+      <h2 class="font-bold text-lg text-slate-900 dark:text-white">Product Management in the AI Era</h2>
+    </div>
+
+    <div class="p-6">
+      
+      
+      <p class="text-slate-700 dark:text-slate-300 text-sm leading-relaxed mb-5">
+        The week highlighted the strategic and economic complexities of building and deploying AI products. Governments are stepping in with significant investments to foster national AI champions and secure &#39;sovereign AI,&#39; while companies like Amazon face substantial cash burn in the race for AI dominance. Product managers are increasingly tasked with integrating AI into core strategies, managing supply chain security for agentic AI, and understanding the evolving technical landscape of AI agents.
+      </p>
+      
+
+      
+      
+      
+      <div class="space-y-4 mb-5">
+        
+        <div class="pb-4 border-b border-slate-100 dark:border-slate-800">
+          <h3 class="font-semibold text-slate-900 dark:text-white mb-1.5 leading-snug hover:text-amber-600 dark:hover:text-amber-400 transition-colors">
+            
+            <a href="https://news.google.com/rss/articles/CBMivAFBVV95cUxNWXpmeFExb1d0MDdYTWRMTU1oQ3lwTkZSQjRZVTVzMFBJQWsycGg1XzlMY003YnRWam4zd3ZSR2t5RGlwMk1UZzIwVDYxaWc3ZzVvcEN0aTR3LWhFQWhNMy1zOTBEVWQ4clI3OHJQbGlrZ2k5UDc0TjNNak9PVHlNQXhZcWl0anptZTFaMlpkS2FHbmd2bUtFWS1BeFRYWHRKWElXOUhUTXp2SFRfYTZoMUdOaXVLWHhybjB6Mw?oc=5" target="_blank" rel="noopener noreferrer">Prime Minister Carney announces landmark investment in Cohere to scale secure, sovereign AI</a>
+            
+          </h3>
+          <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed mb-1.5">Canada made a substantial investment in Cohere, emphasizing the development of secure, nationally controlled AI.</p>
+          <span class="text-xs text-slate-400 dark:text-slate-500">Google News</span>
+        </div>
+        
+        <div class="pb-4 border-b border-slate-100 dark:border-slate-800">
+          <h3 class="font-semibold text-slate-900 dark:text-white mb-1.5 leading-snug hover:text-amber-600 dark:hover:text-amber-400 transition-colors">
+            
+            <a href="https://news.google.com/rss/articles/CBMipwFBVV95cUxQZkJ1ZjFTRDY2d2NpTVJwUGNIdHU3dnV0ZlgyZGJGejJkVjlDeE1RdnRIOW41c0RrbFBDZktUTUlsTzdURGd3VGd5azNaUWY4Zk1WQ2ZLZVg5cmFCTEpIMU1ZM0VOOUlqaGtrOFB2cGdORHd2REJsVFhUaklxWmwxbmM5OERUTlFhdFk4ZXRNWXZnUExIX0x3NnZBMWRDQmVNQjZSc3NlTQ?oc=5" target="_blank" rel="noopener noreferrer">Amazon’s $42.4 Billion Cash Burn Delivers Final Blow In a Rough Week For AI</a>
+            
+          </h3>
+          <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed mb-1.5">Amazon&#39;s significant financial outlay for AI underscores the high costs and competitive pressures in the AI development space.</p>
+          <span class="text-xs text-slate-400 dark:text-slate-500">Google News</span>
+        </div>
+        
+        <div class="pb-4 border-b border-slate-100 dark:border-slate-800">
+          <h3 class="font-semibold text-slate-900 dark:text-white mb-1.5 leading-snug hover:text-amber-600 dark:hover:text-amber-400 transition-colors">
+            
+            <a href="https://news.google.com/rss/articles/CBMiyAFBVV95cUxNMXZJMTNaTkZkb1NFM2lfNncydlQyNlhLaFBydGMwc1BMek9GM1M0ajIwY0ZoY1A2M0plZ05yaklBb1BiZ3M3bmJJS3FDdnh5SDZYUml6TUVLWEQzSFlFV0theWdKUUgtUG5JclhBcS02RC1CTmRUWmNGUnJXWWpGdmwzNTdyVlNER21hQWl2N2EwTmQyT2JEY1Q3ME5SR2F6T1BzejNsb005MVFVRV9YbFFLOUZheHRQenpBb0RMMTdIWEpsQkRidw?oc=5" target="_blank" rel="noopener noreferrer">Dell ties supply chain security to agentic AI risks</a>
+            
+          </h3>
+          <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed mb-1.5">Dell emphasized the critical need to secure the supply chain against risks posed by increasingly autonomous AI agents, a key consideration for product security.</p>
+          <span class="text-xs text-slate-400 dark:text-slate-500">Google News</span>
+        </div>
+        
+        <div class="pb-4 ">
+          <h3 class="font-semibold text-slate-900 dark:text-white mb-1.5 leading-snug hover:text-amber-600 dark:hover:text-amber-400 transition-colors">
+            
+            <a href="https://news.google.com/rss/articles/CBMifkFVX3lxTE1LY1VDc3FkRFJGc1VreGIxM0NlekNPYkRZX0IyajlReGtnWmVKNW1PdmdoXzV1anA2a1lTS0szbldpcHZZYWhjX1d3R2JRR3JJZUR6WG1fZ3dxTWNtZHJLaFlWZGJTSzJTNjdqU253TlAwMmZwdUN6ZDNpdWZ1Zw?oc=5" target="_blank" rel="noopener noreferrer">The Evolution of Agentic Harnesses: From Chains to Graph to Code</a>
+            
+          </h3>
+          <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed mb-1.5">This article explored the technical advancements in building and managing AI agents, offering insights for product development.</p>
+          <span class="text-xs text-slate-400 dark:text-slate-500">Google News</span>
+        </div>
+        
+      </div>
+      
+
+      
+      
+      
+      <div class="p-4 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-xl">
+        <p class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-2">📚 Deep Read</p>
+        <a href="https://news.google.com/rss/articles/CBMifkFVX3lxTE1LY1VDc3FkRFJGc1VreGIxM0NlekNPYkRZX0IyajlReGtnWmVKNW1PdmdoXzV1anA2a1lTS0szbldpcHZZYWhjX1d3R2JRR3JJZUR6WG1fZ3dxTWNtZHJLaFlWZGJTSzJTNjdqU253TlAwMmZwdUN6ZDNpdWZ1Zw?oc=5" target="_blank" rel="noopener noreferrer"
+           class="font-medium text-sm text-amber-600 dark:text-amber-400 hover:underline">
+          The Evolution of Agentic Harnesses: From Chains to Graph to Code
+        </a>
+        
+        <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Understanding the technical underpinnings of agentic AI is crucial for product managers looking to design and implement next-generation AI-powered solutions.</p>
+        
+      </div>
+      
+    </div>
+  </div>
+  
+
+  
+  
+  
+  
+
+  <div class="section-card mb-8 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-2xl overflow-hidden shadow-sm">
+
+    
+    <div class="border-l-4 border-orange pl-5 pr-6 py-5 flex items-center gap-3 border-b border-slate-100 dark:border-slate-800">
+      <span class="text-2xl" role="img">⚡</span>
+      <h2 class="font-bold text-lg text-slate-900 dark:text-white">AI Tools &amp; Launches</h2>
+    </div>
+
+    <div class="p-6">
+      
+      
+      <p class="text-slate-700 dark:text-slate-300 text-sm leading-relaxed mb-5">
+        This week saw a steady stream of new AI-native applications and developer tools, reflecting the ongoing innovation in the AI ecosystem. From open-source AI email clients to SSH clients with integrated AI agents, developers are leveraging AI to enhance productivity and create more intelligent interfaces. There&#39;s also a clear focus on tools that prepare and clean data for AI models, highlighting the importance of data quality in AI development.
+      </p>
+      
+
+      
+      
+      
+      <div class="space-y-4 mb-5">
+        
+        <div class="pb-4 border-b border-slate-100 dark:border-slate-800">
+          <h3 class="font-semibold text-slate-900 dark:text-white mb-1.5 leading-snug hover:text-amber-600 dark:hover:text-amber-400 transition-colors">
+            
+            <a href="https://www.producthunt.com/products/godwit" target="_blank" rel="noopener noreferrer">Godwit</a>
+            
+          </h3>
+          <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed mb-1.5">An open-source, AI-native email client launched, showcasing the trend of integrating AI into fundamental productivity tools.</p>
+          <span class="text-xs text-slate-400 dark:text-slate-500">Product Hunt — The best new products, every day</span>
+        </div>
+        
+        <div class="pb-4 border-b border-slate-100 dark:border-slate-800">
+          <h3 class="font-semibold text-slate-900 dark:text-white mb-1.5 leading-snug hover:text-amber-600 dark:hover:text-amber-400 transition-colors">
+            
+            <a href="https://www.producthunt.com/products/pluto-door" target="_blank" rel="noopener noreferrer">Pluto Door</a>
+            
+          </h3>
+          <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed mb-1.5">Introduced an SSH client featuring an AI agent and a desktop for every server, enhancing server management with AI.</p>
+          <span class="text-xs text-slate-400 dark:text-slate-500">Product Hunt — The best new products, every day</span>
+        </div>
+        
+        <div class="pb-4 border-b border-slate-100 dark:border-slate-800">
+          <h3 class="font-semibold text-slate-900 dark:text-white mb-1.5 leading-snug hover:text-amber-600 dark:hover:text-amber-400 transition-colors">
+            
+            <a href="https://www.producthunt.com/products/agnos" target="_blank" rel="noopener noreferrer">Agnos</a>
+            
+          </h3>
+          <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed mb-1.5">A tool designed to clean documents for AI processing and visualize removed content, emphasizing data preparation for AI.</p>
+          <span class="text-xs text-slate-400 dark:text-slate-500">Product Hunt — The best new products, every day</span>
+        </div>
+        
+        <div class="pb-4 ">
+          <h3 class="font-semibold text-slate-900 dark:text-white mb-1.5 leading-snug hover:text-amber-600 dark:hover:text-amber-400 transition-colors">
+            
+            <a href="https://www.producthunt.com/products/ac-bridge" target="_blank" rel="noopener noreferrer">AC Bridge</a>
+            
+          </h3>
+          <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed mb-1.5">This tool integrates smart lights to indicate when AI models like Claude Code or Codex require attention, offering novel AI-driven notifications.</p>
+          <span class="text-xs text-slate-400 dark:text-slate-500">Product Hunt — The best new products, every day</span>
+        </div>
+        
+      </div>
+      
+
+      
+      
+      
+      <div class="p-4 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-xl">
+        <p class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-2">📚 Deep Read</p>
+        <a href="https://www.producthunt.com/products/agnos" target="_blank" rel="noopener noreferrer"
+           class="font-medium text-sm text-amber-600 dark:text-amber-400 hover:underline">
+          Agnos
+        </a>
+        
+        <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Data quality is paramount for effective AI, and Agnos offers a practical solution for preparing and understanding the impact of data cleaning on AI models.</p>
+        
+      </div>
+      
+    </div>
+  </div>
+  
+
+  
+  
+  
+  
+
+  <div class="section-card mb-8 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-2xl overflow-hidden shadow-sm">
+
+    
+    <div class="border-l-4 border-green pl-5 pr-6 py-5 flex items-center gap-3 border-b border-slate-100 dark:border-slate-800">
+      <span class="text-2xl" role="img">🇮🇳</span>
+      <h2 class="font-bold text-lg text-slate-900 dark:text-white">India — Broad Landscape</h2>
+    </div>
+
+    <div class="p-6">
+      
+      
+      <p class="text-slate-700 dark:text-slate-300 text-sm leading-relaxed mb-5">
+        India&#39;s tech and startup ecosystem remained dynamic this week, with significant policy developments and financial activities. The government&#39;s push for a privacy-led framework to unlock data for AI training signals a strategic move to bolster domestic AI capabilities. Meanwhile, Indian startups continued to attract substantial funding, and major tech players like Jio Platforms reported strong financial results, indicating robust growth across various sectors.
+      </p>
+      
+
+      
+      
+      
+      <div class="space-y-4 mb-5">
+        
+        <div class="pb-4 border-b border-slate-100 dark:border-slate-800">
+          <h3 class="font-semibold text-slate-900 dark:text-white mb-1.5 leading-snug hover:text-amber-600 dark:hover:text-amber-400 transition-colors">
+            
+            <a href="https://inc42.com/buzz/meity-floats-new-privacy-led-framework-to-unlock-data-for-training-ai-models/" target="_blank" rel="noopener noreferrer">MeitY Floats New Privacy-Led Framework To Unlock Data For Training AI Models</a>
+            
+          </h3>
+          <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed mb-1.5">The Ministry of Electronics and Information Technology proposed a new framework to enable data sharing for AI model training while ensuring privacy.</p>
+          <span class="text-xs text-slate-400 dark:text-slate-500">Inc42 Media</span>
+        </div>
+        
+        <div class="pb-4 border-b border-slate-100 dark:border-slate-800">
+          <h3 class="font-semibold text-slate-900 dark:text-white mb-1.5 leading-snug hover:text-amber-600 dark:hover:text-amber-400 transition-colors">
+            
+            <a href="https://news.google.com/rss/articles/CBMi6AFBVV95cUxOYXdIQjREa0RZVks5TjMwQTlGUm52TnBUUmVLZFNXaXNGdXdCUTdsazlvQTRLSXhhazBULXRMYmFJOEJJNVpsTUx4eExtcjl6OU9LUERjekQ5Nm5DclM2VzhySl9idmI2YWpvOU9FSENfbndzLUlXWXVuQktZRHhiQk1xRUs0NUZuaWk5V0FwUW9JQ0FrWlJ0bzQ3ci12VmJKRHlTbEtVTGVzR0dLbVY1WXRQcnlLUVJzay1sSmJUY1hoSXlRbFd4SHFkcGluck5aemw5SXhXZ25PNUtNODAwelRqMDhhT0lF0gHoAUFVX3lxTE5hd0hCNERrRFlWSzlOMzBBOUZSbnZOcFRSZUtkU1dpc0Z1d0JRN2xrOW9BNEtJeGFrMFQtdExiYUk4Qkk1WmxNTHh4TG1yOXo5T0tQRGN6RDk2bkNyUzZXOHJKX2J2YjZham85T0VIQ19ud3MtSVdZdW5CS1lEeGJCTXFFSzQ1Rm5paTlXQXBRb0lDQWtaUnRvNDdyLXZWYkpEeVNsS1VMZXNHR0ttVjVZdFByeUtRUnNrLWxKYlRjWGhJeVFsV3hIcWRwaW5yTlp6bDlJeFdnbk81S004MDB6VGowOGFPSUU?oc=5" target="_blank" rel="noopener noreferrer">TRAI proposes board-approved AI policies, mandatory reporting of serious incidents by telcos</a>
+            
+          </h3>
+          <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed mb-1.5">India&#39;s telecom regulator suggested new AI policies for telcos, including mandatory incident reporting, highlighting a proactive regulatory stance.</p>
+          <span class="text-xs text-slate-400 dark:text-slate-500">Google News</span>
+        </div>
+        
+        <div class="pb-4 border-b border-slate-100 dark:border-slate-800">
+          <h3 class="font-semibold text-slate-900 dark:text-white mb-1.5 leading-snug hover:text-amber-600 dark:hover:text-amber-400 transition-colors">
+            
+            <a href="https://inc42.com/buzz/from-to-cent-to-matiks-indian-startups-raised-over-132-mn-this-week/" target="_blank" rel="noopener noreferrer">From To Cent to Matiks — Indian Startups Raised Over $132 Mn This Week</a>
+            
+          </h3>
+          <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed mb-1.5">Indian startups collectively raised over $132 million, demonstrating continued investor confidence in the ecosystem.</p>
+          <span class="text-xs text-slate-400 dark:text-slate-500">Inc42 Media</span>
+        </div>
+        
+        <div class="pb-4 ">
+          <h3 class="font-semibold text-slate-900 dark:text-white mb-1.5 leading-snug hover:text-amber-600 dark:hover:text-amber-400 transition-colors">
+            
+            <a href="https://inc42.com/buzz/jio-platforms-q2-profit-rises-14-yoy-to-%e2%82%b98387-cr-revenue-up-11/" target="_blank" rel="noopener noreferrer">Jio Platforms Q2 Profit Rises 14% YoY To ₹8,387 Cr, Revenue Up 11%</a>
+            
+          </h3>
+          <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed mb-1.5">Jio Platforms reported strong financial performance, reflecting growth in India&#39;s digital services sector.</p>
+          <span class="text-xs text-slate-400 dark:text-slate-500">Inc42 Media</span>
+        </div>
+        
+      </div>
+      
+
+      
+      
+      
+      <div class="p-4 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-xl">
+        <p class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-2">📚 Deep Read</p>
+        <a href="https://inc42.com/buzz/meity-floats-new-privacy-led-framework-to-unlock-data-for-training-ai-models/" target="_blank" rel="noopener noreferrer"
+           class="font-medium text-sm text-amber-600 dark:text-amber-400 hover:underline">
+          MeitY Floats New Privacy-Led Framework To Unlock Data For Training AI Models
+        </a>
+        
+        <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">This article is crucial for understanding India&#39;s strategic approach to AI development, balancing innovation with data privacy, which will impact all AI-related product initiatives in the country.</p>
+        
+      </div>
+      
+    </div>
+  </div>
+  
+
+  
+  
+  
+  
+
+  <div class="section-card mb-8 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-2xl overflow-hidden shadow-sm">
+
+    
+    <div class="border-l-4 border-pink pl-5 pr-6 py-5 flex items-center gap-3 border-b border-slate-100 dark:border-slate-800">
+      <span class="text-2xl" role="img">📱</span>
+      <h2 class="font-bold text-lg text-slate-900 dark:text-white">Content Creator Trends</h2>
+    </div>
+
+    <div class="p-6">
+      
+      
+      <p class="text-slate-700 dark:text-slate-300 text-sm leading-relaxed mb-5">
+        The content creator landscape continues its rapid evolution, driven by algorithm changes and the increasing integration of AI. This week highlighted how platforms like YouTube and Instagram are shifting their algorithms, requiring creators and marketers to adapt their strategies for engagement and visibility. Concurrently, creators are exploring AI tools for workflow optimization, from generating SOPs to leveraging AI for product mentions, signaling a future where AI is an indispensable creative partner.
+      </p>
+      
+
+      
+      
+      
+      <div class="space-y-4 mb-5">
+        
+        <div class="pb-4 border-b border-slate-100 dark:border-slate-800">
+          <h3 class="font-semibold text-slate-900 dark:text-white mb-1.5 leading-snug hover:text-amber-600 dark:hover:text-amber-400 transition-colors">
+            
+            <a href="https://www.socialmediaexaminer.com/getting-youtube-views-is-changing-what-marketers-need-to-know/" target="_blank" rel="noopener noreferrer">Getting YouTube Views Is Changing: What Marketers Need to Know</a>
+            
+          </h3>
+          <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed mb-1.5">Explored how YouTube&#39;s algorithm changes are impacting view counts and what metrics truly matter for creators and marketers.</p>
+          <span class="text-xs text-slate-400 dark:text-slate-500">Social Media Examiner</span>
+        </div>
+        
+        <div class="pb-4 border-b border-slate-100 dark:border-slate-800">
+          <h3 class="font-semibold text-slate-900 dark:text-white mb-1.5 leading-snug hover:text-amber-600 dark:hover:text-amber-400 transition-colors">
+            
+            <a href="https://news.google.com/rss/articles/CBMiXEFVX3lxTFA4VUJfSUdFeHVsYnBTUHdGUDBPVW1IUGlPOEQ2S2swakM2WmpKLV94VWJpcWJZU1lNNFZ0STc3aTNFTDQybGd2TzNBTXAxTzRhblNPQ0FoYl9FNWt5?oc=5" target="_blank" rel="noopener noreferrer">Instagram Algorithm 2026: What You Need To Know</a>
+            
+          </h3>
+          <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed mb-1.5">Provided essential insights into the latest Instagram algorithm updates and how creators can optimize their content for reach.</p>
+          <span class="text-xs text-slate-400 dark:text-slate-500">Google News</span>
+        </div>
+        
+        <div class="pb-4 border-b border-slate-100 dark:border-slate-800">
+          <h3 class="font-semibold text-slate-900 dark:text-white mb-1.5 leading-snug hover:text-amber-600 dark:hover:text-amber-400 transition-colors">
+            
+            <a href="https://www.socialmediaexaminer.com/ai-generated-sops-product-mentions-from-ai-and-industry-news/" target="_blank" rel="noopener noreferrer">AI-Generated SOPs, Product Mentions From AI, and Industry News</a>
+            
+          </h3>
+          <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed mb-1.5">Discussed how AI is being used by creators for operational efficiency, such as generating standard operating procedures and influencing product visibility.</p>
+          <span class="text-xs text-slate-400 dark:text-slate-500">Social Media Examiner</span>
+        </div>
+        
+        <div class="pb-4 ">
+          <h3 class="font-semibold text-slate-900 dark:text-white mb-1.5 leading-snug hover:text-amber-600 dark:hover:text-amber-400 transition-colors">
+            
+            <a href="https://buffer.com/resources/social-media-engagement-tools/" target="_blank" rel="noopener noreferrer">The 12 Best Social Media Engagement Tools to Build Your Community in 2026</a>
+            
+          </h3>
+          <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed mb-1.5">A comprehensive guide to tools that help creators and businesses enhance their social media engagement and community building efforts.</p>
+          <span class="text-xs text-slate-400 dark:text-slate-500">Buffer Resources</span>
+        </div>
+        
+      </div>
+      
+
+      
+      
+      
+      <div class="p-4 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-xl">
+        <p class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-2">📚 Deep Read</p>
+        <a href="https://www.socialmediaexaminer.com/getting-youtube-views-is-changing-what-marketers-need-to-know/" target="_blank" rel="noopener noreferrer"
+           class="font-medium text-sm text-amber-600 dark:text-amber-400 hover:underline">
+          Getting YouTube Views Is Changing: What Marketers Need to Know
+        </a>
+        
+        <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">This article provides actionable insights into adapting to evolving platform algorithms, a critical challenge for any product manager working with user-generated content or marketing strategies.</p>
+        
+      </div>
+      
+    </div>
+  </div>
+  
+
+
+
+
+<div class="mt-4 mb-10 p-6 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-2xl">
+  <p class="text-xs font-semibold tracking-widest uppercase text-amber-400 dark:text-amber-600 mb-3">Pattern of the Week</p>
+  <p class="text-base leading-relaxed">This week&#39;s overarching pattern is the increasing convergence of AI policy and product development, particularly concerning data governance and national strategic interests. Governments, like India and Canada, are actively shaping the AI landscape through privacy frameworks and significant investments in &#39;sovereign AI,&#39; directly influencing how AI products are built, secured, and deployed. This highlights a future where regulatory foresight and national strategy are as critical to AI product success as technical innovation.</p>
+</div>
+
+
+
+  </main>
+
+  <!-- ARCHIVE NAVIGATION -->
+  
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 pb-8">
+    <div class="border-t border-slate-200 dark:border-slate-700 pt-8">
+      <h3 class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-3">Recent Digests</h3>
+      <div class="flex flex-wrap gap-2">
+        
+        <a href="archive/2026-10-30.html" class="text-xs px-3 py-1.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-amber-100 dark:hover:bg-amber-900/30 hover:text-amber-700 dark:hover:text-amber-400 transition-colors">
+          Oct 30
+        </a>
+        
+        <a href="archive/2026-10-29.html" class="text-xs px-3 py-1.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-amber-100 dark:hover:bg-amber-900/30 hover:text-amber-700 dark:hover:text-amber-400 transition-colors">
+          Oct 29
+        </a>
+        
+        <a href="archive/2026-10-28.html" class="text-xs px-3 py-1.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-amber-100 dark:hover:bg-amber-900/30 hover:text-amber-700 dark:hover:text-amber-400 transition-colors">
+          Oct 28
+        </a>
+        
+        <a href="archive/2026-10-27.html" class="text-xs px-3 py-1.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-amber-100 dark:hover:bg-amber-900/30 hover:text-amber-700 dark:hover:text-amber-400 transition-colors">
+          Oct 27
+        </a>
+        
+        <a href="archive/2026-10-26.html" class="text-xs px-3 py-1.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-amber-100 dark:hover:bg-amber-900/30 hover:text-amber-700 dark:hover:text-amber-400 transition-colors">
+          Oct 26
+        </a>
+        
+        <a href="archive/2026-10-24.html" class="text-xs px-3 py-1.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-amber-100 dark:hover:bg-amber-900/30 hover:text-amber-700 dark:hover:text-amber-400 transition-colors">
+          Oct 24
+        </a>
+        
+      </div>
+    </div>
+  </div>
+  
+
+  <!-- FOOTER -->
+  <footer class="border-t border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 py-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500 dark:text-slate-500">
+      <span>Generated at 02:08 PM IST by PDD Agent</span>
+      <a href="https://github.com" class="hover:text-amber-500 transition-colors">View on GitHub →</a>
+    </div>
+  </footer>
+
+  <script>
+    // ─── Dark mode persistence ───────────────────
+    function toggleDark() {
+      const html = document.documentElement;
+      html.classList.toggle('dark');
+      localStorage.setItem('pdd-theme', html.classList.contains('dark') ? 'dark' : 'light');
+    }
+
+    // Apply saved preference on load
+    (function() {
+      const saved = localStorage.getItem('pdd-theme');
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      if (saved === 'dark' || (!saved && prefersDark)) {
+        document.documentElement.classList.add('dark');
+      }
+    })();
+
+    // ─── Collapsible sources ─────────────────────
+    function toggleSources() {
+      const el = document.getElementById('sources-list');
+      if (el) el.classList.toggle('hidden');
+    }
+  </script>
+</body>
+</html>
